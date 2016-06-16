@@ -1,5 +1,13 @@
 var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
+
+// Check if environment supports native promises
+if (typeof Promise === 'undefined') {
+  AWS.config.setPromisesDependency(require('bluebird'));
+}
+
+var s3 = new AWS.S3({
+    region: 'us-east-1'
+});
 
 exports.handler = function(event, context, callback){
     var fileInfo = event.fileInfo;

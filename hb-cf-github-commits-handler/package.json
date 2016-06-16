@@ -7,8 +7,5 @@
     "test": "test"
   },
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "github": "^1.1.2"
-  }
+  "license": "MIT"
 }

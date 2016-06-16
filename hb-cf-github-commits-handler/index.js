@@ -1,8 +1,13 @@
 var http = require('http');
 var AWS = require('aws-sdk');
-var GitHubApi = require('github');
-var github = new GitHubApi({
-    version: '3.0.0'
+
+// Check if environment supports native promises
+if (typeof Promise === 'undefined') {
+  AWS.config.setPromisesDependency(require('bluebird'));
+}
+
+var sns = new AWS.SNS({
+    region: 'us-east-1'
 });
 
 exports.handler = function(event, context, callback){
@@ -26,6 +31,7 @@ exports.handler = function(event, context, callback){
 function getFileInfoFromEvent(githubEvent){
 
     var repository = githubEvent.repository.full_name;
+    var bucket = githubEvent.repository.name;
 
     var files = [];
 
@@ -33,7 +39,7 @@ function getFileInfoFromEvent(githubEvent){
         commit.modified.forEach(function(filePath){
             console.log('getting info for file with path: ' + filePath);
             var fileInfo = {
-                bucket: 'sweet-skills-cloud-formation-templates',
+                bucket: bucket,
                 path: `https://raw.githubusercontent.com/${repository}/master/{filePath}`,
                 name: filePath.substr(filePath.lastIndexOf('/') + 1)
             }
@@ -44,32 +50,14 @@ function getFileInfoFromEvent(githubEvent){
     return files;
 }
 
-function publishFiles(files, callback){
-    files.forEach(function(fileInfo){
-        publishFileInfo(fileInfo);
-    });
+var publishFiles = function publishFiles(files){
+    return Promise.all(files.forEach(publishFileInfo));
 }
 
 function publishFileInfo(file){
     var params = {
-        Message: '',
-        MessageAttributes: {
-            key: {
-                DataType: '',
-                BinaryValue: new Buffer() || '',
-                StringValue: ''
-            }
-        },
-        MessageStructure: '',
-        Subject: '',
-        TargetArn: '',
+        Message: JSON.stringify(file),
         TopicArn: ''
     };
-    sns.publish(params, function(err, data){
-        if (err){
-            console.log(err, err.stack);
-        } else {
-            console.log(data);
-        }
-    });
+    return sns.publish(params).promise();
 }
