@@ -1,0 +1,11 @@
+{
+  "name": "hb-cf-save-templates-s3",
+  "version": "0.0.1",
+  "description": "lambda function which receives file info, gets the file from github, and saves to s3",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT"
+}
