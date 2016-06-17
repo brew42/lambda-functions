@@ -1,0 +1,14 @@
+{
+  "name": "hb-save-remote-file-to-s3",
+  "version": "0.0.1",
+  "description": "lambda function which receives file info, gets the file from it's URL, and saves to the s3 bucket specified",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.0"
+  }
+}

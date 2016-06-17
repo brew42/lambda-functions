@@ -1,0 +1,14 @@
+{
+  "name": "hb-cf-github-commit",
+  "version": "0.0.1",
+  "description": "lambda function which receives sns notification of github commit, gets modified file information, and publishes info for later processing",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.0"
+  }
+}
