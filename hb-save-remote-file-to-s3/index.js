@@ -1,65 +1,70 @@
+var https = require('https');
 var AWS = require('aws-sdk');
-
-// Check if environment supports native promises
-if (typeof Promise === 'undefined') {
-  AWS.config.setPromisesDependency(require('bluebird'));
-}
 
 var s3 = new AWS.S3({
     region: 'us-east-1'
 });
 
 exports.handler = function(event, context, callback){
-    var fileInfo = event.fileInfo;
+    var fileInfo = JSON.parse(event.Records[0].Sns.Message);
     
-    getFileFromInfo(file, function(err, file){
-        if(err){
-            console.log(err, err.stacktrace);
+    getFileFromInfo(fileInfo)
+        .then(saveFileToS3)
+        .then(function(result) {
+            console.log('Result from lambda function: ', result);
             context.done();
-        } else {
-            saveFileInS3(file, function(err, data){
-                if(err){
-                    console.log(err, err.stacktrace);
-                    context.done();
-                } else {
-                    context.done();
-                }
+        })
+        .catch(function(err) {
+            console.log('Error from lambda function', err);
+            context.done();
+        });    
+}
+
+var getFileFromInfo = function getFileFromInfo(fileInfo){
+    return new Promise(function(resolve, reject){
+        console.log('getting file from url: ' + fileInfo.path);
+
+        https.get(fileInfo.path, (res) => {
+
+            var file = '';
+            
+            res.on('data', (chunk) => {
+                file += chunk;
             });
-        }
-    });
-    
+
+            res.on('end', () => {
+                file = JSON.parse(file.toString());
+                console.log('got file: ', file);
+                fileInfo.file = file;
+                resolve(fileInfo);
+            });
+
+        }).on('error', (err) => {
+            console.log('error getting file', err);
+            reject(err)
+        });
+    })
 }
 
-function getFile(fileInfo, callback){
-    http.get(file.path, function(err, file){
-        if(err){
-            console.log('Error getting the file from github');
-            console.log(err, err.stackrace);
-            callback(err);
-        } else {
-            fileInfo.file = file;
-            callback(null, fileInfo);
-        }
-    });
-}
-
-function saveFileInS3(file, callback){
+var saveFileToS3 = function saveFileToS3(fileInfo){
+    console.log('saving file: ', fileInfo);
     var s3Params = {
-        Bucket: file.bucket,
-        Key: (new Date()).getTime() + file.name,
-        Body: file.file,
+        Bucket: fileInfo.bucket,
+        Key: (new Date()).getTime() + file.bucketPath,
+        Body: fileInfo.file,
     };
-
-    console.log('Saving file ' + event.file.name + ' to S3 bucket: ' + event.bucket);
-    
-    // TODO use a package like https://www.npmjs.com/package/aws-sdk-then instead of callbacks
-    s3.upload(s3Params, function(err, data){
-        if(err){
-            console.log(err, err.stack);
-            callback(err);
-        } else {
-            console.log('Successfully saved template to S3: ', data);
-            callback(data);
-        }
-    });
+    return new Promise(function(resolve, reject){
+        console.log('Saving file ' + fileInfo.name + ' to S3 bucket: ' + fileInfo.bucket);
+        
+        // TODO use a package like https://www.npmjs.com/package/aws-sdk-then instead of callbacks
+        s3.putObject(s3Params, function(err, data){
+            if(err){
+                console.log('error saving file', err);
+                reject(err);
+            } else {
+                console.log('Successfully saved template to S3: ', data);
+                resolve();
+            }
+        });
+    });    
 }

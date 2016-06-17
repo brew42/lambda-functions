@@ -26,7 +26,7 @@ exports.handler = function(event, context, callback){
             .catch(function(err) {
                 console.log('Error from lambda function', err);
                 context.done();
-            })
+            });
 
     } else {
         context.done();
@@ -76,7 +76,9 @@ function getFileInfo(filePath, bucket, repository){
     return {
         bucket: bucket,
         path: `https://raw.githubusercontent.com/${repository}/master/${filePath}`,
-        name: filePath.substr(filePath.lastIndexOf('/') + 1)
+        name: filePath.substr(filePath.lastIndexOf('/') + 1),
+        folder: filePath.substr(0, filePath.lastIndexOf('/')),
+        bucketPath: filePath
     };
 }
 
