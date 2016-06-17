@@ -29,18 +29,15 @@ exports.handler = function(event, context, callback){
             })
 
     } else {
-        console.log('not a commit event');
         context.done();
     }
 }
 
 function isCommitEvent(event){
-    console.log('is commit event?');
     return event.hasOwnProperty('pusher');
 }
 
 var getConfigFile = function getConfigFile(functionName){
-    console.log('get config file');
     var params = {
         Bucket: 'sweet-skills-lambda-config/' + functionName,
         Key: 'properties.json'
@@ -50,7 +47,6 @@ var getConfigFile = function getConfigFile(functionName){
 
 var setConfig = function setConfig(configFile){
     return new Promise(function(resolve){
-        console.log('set config');
         var properties = configFile.Body.toString();
         CONFIG = JSON.parse(properties);
         resolve();
@@ -59,7 +55,6 @@ var setConfig = function setConfig(configFile){
 
 var getFilesFromEvent = function getFilesFromEvent(){
     return new Promise(function(resolve){
-        console.log('get files from event');
         var repository = githubEvent.repository.full_name;
         var bucket = githubEvent.repository.name;
         
@@ -78,7 +73,6 @@ var getFilesFromEvent = function getFilesFromEvent(){
 }
 
 function getFileInfo(filePath, bucket, repository){
-    console.log('get file info');
     return {
         bucket: bucket,
         path: `https://raw.githubusercontent.com/${repository}/master/${filePath}`,
@@ -87,11 +81,6 @@ function getFileInfo(filePath, bucket, repository){
 }
 
 var publishFiles = function publishFiles(files){
-    console.log('publishing ' + files.length + ' files');
-    // var publishPromises = [];
-    // files.forEach(function(file){
-    //     publishPromises.push(publishFileInfo(file));
-    // });
     return Promise.all(files.map(function(file){
         return publishFileInfo(file);
     }));
@@ -102,6 +91,5 @@ var publishFileInfo = function publishFileInfo(file){
         Message: JSON.stringify(file),
         TopicArn: CONFIG.saveToS3ARN
     };
-    console.log('publish file info', params);
     return sns.publish(params).promise();
 }
