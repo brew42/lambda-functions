@@ -17,7 +17,7 @@ exports.handler = function(event, context, callback){
 
         getConfigFile(context.functionName)
             .then(setConfig)
-            .then(getFilesFromEvent)
+            .then(getFiles)
             .then(publishFiles)
             .then(function(result) {
                 console.log('Result from lambda function: ', result);
@@ -37,15 +37,15 @@ function isCommitEvent(event){
     return event.hasOwnProperty('pusher');
 }
 
-var getConfigFile = function getConfigFile(functionName){
+var getConfigFile = function(functionName){
     var params = {
-        Bucket: 'sweet-skills-lambda-config/' + functionName,
+        Bucket: 'honey-badger-lambda-config/' + functionName,
         Key: 'properties.json'
     };
     return s3.getObject(params).promise();
 }
 
-var setConfig = function setConfig(configFile){
+var setConfig = function(configFile){
     return new Promise(function(resolve){
         var properties = configFile.Body.toString();
         CONFIG = JSON.parse(properties);
@@ -53,7 +53,7 @@ var setConfig = function setConfig(configFile){
     });
 }
 
-var getFilesFromEvent = function getFilesFromEvent(){
+var getFiles = function(){
     return new Promise(function(resolve){
         var repository = githubEvent.repository.full_name;
         var bucket = githubEvent.repository.name;
@@ -62,36 +62,43 @@ var getFilesFromEvent = function getFilesFromEvent(){
 
         githubEvent.commits.forEach(function(commit){
             commit.modified.forEach(function(filePath){
-                files.push(getFileInfo(filePath, bucket, repository));
+                var remove = false;
+                files.push(getFileInfo(filePath, bucket, repository, remove));
             });
             commit.added.forEach(function(filePath){
-                files.push(getFileInfo(filePath, bucket, repository));
+                var remove = false;
+                files.push(getFileInfo(filePath, bucket, repository, remove));
+            });
+            commit.removed.forEach(function(filePath){
+                var remove = true;
+                files.push(getFileInfo(filePath, bucket, repository, remove));
             });
         });
         resolve(files);
     });
 }
 
-function getFileInfo(filePath, bucket, repository){
+function getFileInfo(filePath, bucket, repository, remove){
     return {
         bucket: bucket,
         path: `https://raw.githubusercontent.com/${repository}/master/${filePath}`,
         name: filePath.substr(filePath.lastIndexOf('/') + 1),
         folder: filePath.substr(0, filePath.lastIndexOf('/')),
-        bucketPath: filePath
+        bucketPath: filePath,
+        remove: remove
     };
 }
 
-var publishFiles = function publishFiles(files){
+var publishFiles = function(files){
     return Promise.all(files.map(function(file){
         return publishFileInfo(file);
     }));
 }
 
-var publishFileInfo = function publishFileInfo(file){
+var publishFileInfo = function(fileInfo){
     var params = {
-        Message: JSON.stringify(file),
-        TopicArn: CONFIG.saveToS3ARN
+        Message: JSON.stringify(fileInfo),
+        TopicArn: fileInfo.remove ? CONFIG.deleteFromS3ARN : CONFIG.saveToS3ARN
     };
     return sns.publish(params).promise();
 }

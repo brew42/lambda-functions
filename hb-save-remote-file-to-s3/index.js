@@ -20,51 +20,29 @@ exports.handler = function(event, context, callback){
         });    
 }
 
-var getFileFromInfo = function getFileFromInfo(fileInfo){
+var getFileFromInfo = function(fileInfo){
     return new Promise(function(resolve, reject){
-        console.log('getting file from url: ' + fileInfo.path);
-
+        var file = '';
         https.get(fileInfo.path, (res) => {
 
-            var file = '';
-            
             res.on('data', (chunk) => {
                 file += chunk;
             });
 
             res.on('end', () => {
-                file = JSON.parse(file.toString());
-                console.log('got file: ', file);
                 fileInfo.file = file;
                 resolve(fileInfo);
             });
 
-        }).on('error', (err) => {
-            console.log('error getting file', err);
-            reject(err)
-        });
-    })
+        }).on('error', (err) => { reject(err) });
+    });
 }
 
-var saveFileToS3 = function saveFileToS3(fileInfo){
-    console.log('saving file: ', fileInfo);
+var saveFileToS3 = function(fileInfo){
     var s3Params = {
         Bucket: fileInfo.bucket,
-        Key: (new Date()).getTime() + file.bucketPath,
+        Key: fileInfo.folder + '/' + fileInfo.name,
         Body: fileInfo.file,
     };
-    return new Promise(function(resolve, reject){
-        console.log('Saving file ' + fileInfo.name + ' to S3 bucket: ' + fileInfo.bucket);
-        
-        // TODO use a package like https://www.npmjs.com/package/aws-sdk-then instead of callbacks
-        s3.putObject(s3Params, function(err, data){
-            if(err){
-                console.log('error saving file', err);
-                reject(err);
-            } else {
-                console.log('Successfully saved template to S3: ', data);
-                resolve();
-            }
-        });
-    });    
+    return s3.putObject(s3Params).promise();
 }
