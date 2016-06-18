@@ -1,12 +1,12 @@
+'use strict'
 var AWS = require('aws-sdk');
-
 var sns = new AWS.SNS({ region: 'us-east-1' });
 var s3 = new AWS.S3({ region: 'us-east-1' });
 
 var CONFIG, githubEvent;
 
-exports.handler = function(event, context, callback){
-    githubEvent = JSON.parse(event.Records[0].Sns.Message);    
+exports.handler = (event, context, callback) => {
+    githubEvent = getSNSMessage(event);    
     
     /*
     * if it's a commit event get the list of files that changed and their
@@ -19,11 +19,11 @@ exports.handler = function(event, context, callback){
             .then(setConfig)
             .then(getFiles)
             .then(publishFiles)
-            .then(function(result) {
+            .then((result) => {
                 console.log('Result from lambda function: ', result);
                 context.done();
             })
-            .catch(function(err) {
+            .catch((err) => {
                 console.log('Error from lambda function', err);
                 context.done();
             });
@@ -37,7 +37,7 @@ function isCommitEvent(event){
     return event.hasOwnProperty('pusher');
 }
 
-var getConfigFile = function(functionName){
+var getConfigFile = (functionName) => {
     var params = {
         Bucket: 'honey-badger-lambda-config/' + functionName,
         Key: 'properties.json'
@@ -45,7 +45,7 @@ var getConfigFile = function(functionName){
     return s3.getObject(params).promise();
 }
 
-var setConfig = function(configFile){
+var setConfig = (configFile) => {
     return new Promise(function(resolve){
         var properties = configFile.Body.toString();
         CONFIG = JSON.parse(properties);
@@ -53,7 +53,7 @@ var setConfig = function(configFile){
     });
 }
 
-var getFiles = function(){
+var getFiles = () => {
     return new Promise(function(resolve){
         var repository = githubEvent.repository.full_name;
         var bucket = githubEvent.repository.name;
@@ -89,16 +89,20 @@ function getFileInfo(filePath, bucket, repository, remove){
     };
 }
 
-var publishFiles = function(files){
-    return Promise.all(files.map(function(file){
+var publishFiles = (files) => {
+    return Promise.all(files.map((file) => {
         return publishFileInfo(file);
     }));
 }
 
-var publishFileInfo = function(fileInfo){
+var publishFileInfo = (fileInfo) => {
     var params = {
         Message: JSON.stringify(fileInfo),
         TopicArn: fileInfo.remove ? CONFIG.deleteFromS3ARN : CONFIG.saveToS3ARN
     };
     return sns.publish(params).promise();
+}
+
+function getSNSMessage(event){
+    return JSON.parse(event.Records[0].Sns.Message);
 }
