@@ -6,18 +6,23 @@ var s3 = new AWS.S3({
 });
 
 exports.handler = (event, context, callback) => {
-    var fileInfo = getSNSMessage(event);
     
-    getFile(fileInfo)
-        .then(saveFileToS3)
-        .then( (result) => {
-            console.log('Result from lambda function: ', result);
-            context.done();
-        })
-        .catch( (err) => {
-            console.log('Error from lambda function', err);
-            context.done();
-        });    
+    // give GitHub time to cache the newly updated file
+    setTimeout(function(){
+        var fileInfo = getSNSMessage(event);
+            
+        getFile(fileInfo)
+            .then(saveFileToS3)
+            .then( (result) => {
+                console.log('Result from lambda function: ', result);
+                context.done();
+            })
+            .catch( (err) => {
+                console.log('Error from lambda function', err);
+                context.done();
+            });    
+    }, 10000);
+    
 }
 
 var getFile = (fileInfo) => {
