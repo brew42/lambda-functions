@@ -22,6 +22,8 @@ exports.handler = (event, context, callback) => {
 
 var getFile = (fileInfo) => {
     return new Promise(function(resolve, reject){
+        console.log('Getting file from ' + fileInfo.path);
+        
         var file = '';
         https.get(fileInfo.path, (res) => {
 
@@ -30,11 +32,15 @@ var getFile = (fileInfo) => {
             });
 
             res.on('end', () => {
+                console.log('File info received');
                 fileInfo.file = file;
                 resolve(fileInfo);
             });
 
-        }).on('error', (err) => { reject(err) });
+        }).on('error', (err) => {
+            console.log('Error getting the file info', err);
+            reject(err);
+        });
     });
 };
 

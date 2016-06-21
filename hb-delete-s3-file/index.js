@@ -7,6 +7,8 @@ var s3 = new AWS.S3({
 exports.handler = (event, context, callback) => {
     var fileInfo = getSNSMessage(event);
     
+    console.log('Deleting file:', fileInfo);
+    
     deleteFile(fileInfo)
         .then((result) => {
             console.log('Result from lambda function: ', result);

@@ -14,7 +14,8 @@ exports.handler = (event, context, callback) => {
     * further processing by another lambda function 
     */ 
     if (isCommitEvent(githubEvent)) {
-
+        console.log('Received a GitHub commit notification: ', githubEvent);
+        
         getConfigFile(context.functionName)
             .then(setConfig)
             .then(getFiles)
@@ -96,6 +97,8 @@ var publishFiles = (files) => {
 }
 
 var publishFileInfo = (fileInfo) => {
+    console.log('Publishing info for file: ', fileInfo);
+    
     var params = {
         Message: JSON.stringify(fileInfo),
         TopicArn: fileInfo.remove ? CONFIG.deleteFromS3ARN : CONFIG.saveToS3ARN
