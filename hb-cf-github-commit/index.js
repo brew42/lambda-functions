@@ -39,8 +39,8 @@ function isCommitEvent(event){
 }
 
 var getConfigFile = (functionName) => {
-    var params = {
-        Bucket: 'honey-badger-lambda-config/' + functionName,
+    let params = {
+        Bucket: `honey-badger-lambda-config/${functionName}`,
         Key: 'properties.json'
     };
     return s3.getObject(params).promise();
@@ -48,7 +48,7 @@ var getConfigFile = (functionName) => {
 
 var setConfig = (configFile) => {
     return new Promise((resolve) => {
-        var properties = configFile.Body.toString();
+        let properties = configFile.Body.toString();
         CONFIG = JSON.parse(properties);
         resolve();
     });
@@ -56,24 +56,24 @@ var setConfig = (configFile) => {
 
 var getFiles = () => {
     return new Promise(function(resolve){
-        var repository = githubEvent.repository.full_name;
-        var bucket = githubEvent.repository.name;
+        let repository = githubEvent.repository.full_name;
+        let bucket = githubEvent.repository.name;        
         
-        var files = [];
+        let files = [];
 
-        githubEvent.commits.forEach(function(commit){
-            commit.modified.forEach(function(filePath){
-                var remove = false;
+        githubEvent.commits.map(commit => {
+            commit.modified.map(filePath => {
+                let remove = false;
                 files.push(getFileInfo(filePath, bucket, repository, remove));
             });
-            commit.added.forEach(function(filePath){
-                var remove = false;
+            commit.added.map(filePath => {
+                let remove = false;
                 files.push(getFileInfo(filePath, bucket, repository, remove));
             });
-            commit.removed.forEach(function(filePath){
-                var remove = true;
-                files.push(getFileInfo(filePath, bucket, repository, remove));
-            });
+            commit.removed.map(filePath => {
+                let remove = true;
+                files.push(getFileInfo(filePath, bucket, repository, remove));   
+            });     
         });
         resolve(files);
     });
@@ -97,7 +97,7 @@ var publishFiles = (files) => {
 var publishFileInfo = (fileInfo) => {
     console.log('Publishing info for file: ', fileInfo);
     
-    var params = {
+    let params = {
         Message: JSON.stringify(fileInfo),
         TopicArn: fileInfo.remove ? CONFIG.deleteFromS3ARN : CONFIG.saveToS3ARN
     };
