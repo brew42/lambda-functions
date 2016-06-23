@@ -32,9 +32,7 @@ var getFile = (fileInfo) => {
         var file = '';
         https.get(fileInfo.path, (res) => {
 
-            res.on('data', (chunk) => {
-                file += chunk;
-            });
+            res.on('data', (chunk) => file += chunk );
 
             res.on('end', () => {
                 console.log('File info received');

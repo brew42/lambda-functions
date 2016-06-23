@@ -91,9 +91,7 @@ function getFileInfo(filePath, bucket, repository, remove){
 }
 
 var publishFiles = (files) => {
-    return Promise.all(files.map((file) => {
-        return publishFileInfo(file);
-    }));
+    return Promise.all( files.map( (file) => publishFileInfo(file) ) );
 }
 
 var publishFileInfo = (fileInfo) => {
