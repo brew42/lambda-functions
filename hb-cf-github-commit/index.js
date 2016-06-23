@@ -47,7 +47,7 @@ var getConfigFile = (functionName) => {
 }
 
 var setConfig = (configFile) => {
-    return new Promise(function(resolve){
+    return new Promise((resolve) => {
         var properties = configFile.Body.toString();
         CONFIG = JSON.parse(properties);
         resolve();
