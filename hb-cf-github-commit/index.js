@@ -13,7 +13,7 @@ exports.handler = (event, context, callback) => {
     * location in the repository, then publish each file to SNS topic for 
     * further processing by another lambda function 
     */ 
-    if (isCommitEvent(githubEvent)) {
+    if (isMasterCommitEvent(githubEvent)) {
         console.log('Received a GitHub commit notification: ', githubEvent);
         
         getConfigFile(context.functionName)
@@ -34,8 +34,8 @@ exports.handler = (event, context, callback) => {
     }
 }
 
-function isCommitEvent(event){
-    return event.hasOwnProperty('pusher');
+function isMasterCommitEvent(event){
+    return event.hasOwnProperty('pusher') && event.ref == 'refs/heads/master';
 }
 
 var getConfigFile = (functionName) => {
