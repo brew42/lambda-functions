@@ -9,7 +9,7 @@ exports.handler = (event, context, callback) => {
     cfMessage = getMessage(event);
     
     /*
-    * Only interested in sending notifications for complete or fail events
+    * Only interested in sending notifications for stack completed events
     */
     if (isStackEventCompleted(cfMessage)) {
         console.log('Received a CloudFormation stack completed event notification: ', cfMessage);
