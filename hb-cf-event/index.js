@@ -56,7 +56,7 @@ var setConfig = (configFile) => {
 
 var createTextMessage = () => {
     return new Promise(function(resolve){
-        var textMessage = 'Stack ' + cfMessage.StackName + ' has completed with status: ' + cfMessage.ResourceStatus;
+        var textMessage = 'stack ' + cfMessage.StackName + ' has completed with status: ' + cfMessage.ResourceStatus;
         resolve(textMessage);
     });
 }
