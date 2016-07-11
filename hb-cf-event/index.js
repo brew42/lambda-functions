@@ -1,7 +1,9 @@
 'use strict'
 var AWS = require('aws-sdk');
 var sns = new AWS.SNS({ region: 'us-east-1' });
-var s3 = new AWS.S3({ region: 'us-east-1' });
+var s3 = new AWS.S3({ 
+    region: 'us-east-1',
+    signatureVersion: 'v2' });
 
 var CONFIG, cfMessage = {};
 
