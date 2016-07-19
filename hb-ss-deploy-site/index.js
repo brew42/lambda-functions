@@ -1,187 +1,36 @@
-'use strict';
+'use strict'
+var AWS = require('aws-sdk');
+var codePipeline = new AWS.CodePipeline();
 
-// CodePipeline should have the following "UserParameters":
-//  'artifact' : name of output artifact from the CodeCommit source stage.
-//  's3StaticSiteBucket' : name of desination bucket for the S3 static website.
-//  's3StaticSiteBucketRegion' : region of the S3 bucket.
+exports.handler = (event, context, callback) => {
+    console.log('Started');
 
-const fs = require('fs');
-const path = require('path');
-const AWS = require('aws-sdk');
-const unzip = require('yauzl');
-const mkdirp = require('mkdirp');
+    var job = event['CodePipeline.job'];
+    var jobData = event['CodePipeline.job'].data;
+    var jobId = event['CodePipeline.job'].id;
 
-const filePath = '/tmp/artifact.zip';
-const cwd = '/tmp';
-const codepipeline = new AWS.CodePipeline();
+    console.log('job', job);
+    console.log('pipeline data', jobData);
+    console.log('job id', jobId);
 
-const jobData, jobId, userParams, sourceBucket, destBucket, s3DownloadClient, s3UploadClient;
-
-exports.handler = (event, context) => {
-  console.log(event['CodePipeline.job']);
-  signalLambda(context);
-  // jobData = event['CodePipeline.job'].data;
-  // jobId = event['CodePipeline.job'].id;
-  
-  // userParams = getUserParams();
-  // sourceBucket = getS3BucketLocation(userParams.artifactName);
-  // destBucket = {
-  //   bucket: userParams.s3StaticSiteBucket,
-  //   region: userParams.s3StaticSiteBucketRegion
-  // };
-
-  // s3DownloadClient = createDownloadS3Client(sourceBucket.bucket);
-  // s3UploadClient = new AWS.S3({
-  //   params: { Bucket: destBucket.bucket },
-  //   region: destBucket.region
-  // });
-
-  // getCodeFromS3(s3DownloadClient, sourceBucket.key)
-  //   .then(unzipCode)
-  //   .then((filelist) => {
-  //     return Promise.all([filelist, putObjects(filelist, s3UploadClient)]);
-  //   })
-  //   .then(putJobSuccess)
-  //   .catch((err) => {
-  //     putJobFailure(err);
-  //   });
-};
-
-function signalLambda(context, err) {
-  if (err) {
-    // Although failed, signal context.succeed to avoid Lambda function being retried.
-    context.succeed('Failed - see cloudwatch logs for more details.');
-  } else {
-    context.succeed('Done');
-  }
-}
-
-function putJobSuccess() {
-  console.log('Sending success!');
-  return codepipeline.putJobSuccessResult({ jobId }).promise()
-    .then(() => signalLambda(null));
-}
-
-function putJobFailure(message, context) {
-  console.error('Error occurred, sending failure.');
-  console.error(message);
-  const params = {
-    jobId: jobId,
-    failureDetails: {
-      message: JSON.stringify(message),
-      type: 'JobFailed',
-      externalExecutionId: context.invokeid,
-    },
-  };
-  return codepipeline.putJobFailureResult(params).promise()
-    .then(() => signalLambda('Error'));
-}
-
-function getUserParams() {
-  try {
-    const inputJson = JSON.parse(jobData.actionConfiguration.configuration.UserParameters);
-    return {
-      artifactName: inputJson.artifact,
-      s3StaticSiteBucket: inputJson.s3StaticSiteBucket,
-      s3StaticSiteBucketRegion: inputJson.s3StaticSiteBucketRegion
-    };
-  } catch (err) {
-    putJobFailure(err);
-    signalLambda(err);
-  }
-}
-
-function getS3BucketLocation(artifactName) {
-  const arr = jobData.inputArtifacts;
-  for (const obj of arr) {
-    if (obj.name === artifactName) {
-      return {
-        bucket: obj.location.s3Location.bucketName,
-        key: obj.location.s3Location.objectKey,
-      };
-    }
-    putJobFailure('Unable to get Source S3 Bucket info from JSON');
-  }
-}
-
-function createDownloadS3Client(sourceS3Bucket) {
-  const keyId = jobData.artifactCredentials.accessKeyId;
-  const keySecret = jobData.artifactCredentials.secretAccessKey;
-  const sessionToken = jobData.artifactCredentials.sessionToken;
-
-  return new AWS.S3({
-    accessKeyId: keyId,
-    secretAccessKey: keySecret,
-    sessionToken: sessionToken,
-    params: { Bucket: sourceS3Bucket },
-    signatureVersion: 'v4',
-  });
-}
-
-function getCodeFromS3(s3client, key) {
-  return new Promise((resolve, reject) => {
-    console.log('Downloading CodeCommit artifact.');
-    const writeStream = fs.createWriteStream(filePath);
-    const req = s3client.getObject({ Key: key });
-    req.on('error', reject);
-    const readStream = req.createReadStream();
-    readStream.on('error', reject);
-    readStream.pipe(writeStream);
-    writeStream.on('error', reject);
-    writeStream.once('finish', () => {
-      resolve();
-    });
-  });
-}
-
-function unzipCode() {
-  console.log('Unzipping contents...');
-  return new Promise((resolve, reject) => {
-    const files = [];
-    unzip.open(filePath, { autoclose: false, lazyEntries: true }, (err, zipfile) => {
-      if (err) reject;
-      zipfile.readEntry();
-      zipfile.on('entry', (entry) => {
-        if (/\/$/.test(entry.fileName)) {
-          // directory file names end with '/'
-          mkdirp(path.join(cwd, entry.fileName), (err) => {
-            if (err) reject;
-            zipfile.readEntry();
-          });
-        } else {
-          zipfile.openReadStream(entry, (err, readStream) => {
-            if (err) reject;
-            // ensure parent directory exists
-            mkdirp(path.join(cwd, path.dirname(entry.fileName)), (err) => {
-              if (err) reject;
-              readStream.pipe(fs.createWriteStream(path.join(cwd, entry.fileName)));
-              readStream.on('end', () => {
-                // add file details to files array
-                files.push({
-                  key: entry.fileName,
-                  body: fs.createReadStream(path.join(cwd, entry.fileName)),
-                });
-                zipfile.readEntry();
-              });
-            });
-          });
+    var pipelineParams = {
+        jobId: jobId,
+        currentRevision: {
+            changeIdentifier: '',//TODO what is this?
+            revision: ''//TODO what is this?
         }
-      });
-      zipfile.once('end', () => {
-        zipfile.close();
-        resolve(files);
-      });
-    });
-  });
-}
-
-function putObjects(files, s3UploadClient) {
-  console.log('Uploading files to S3 Static Website.');
-  return Promise.all( files.map( (file) => {
-    const params = {
-      Key: file.key,
-      Body: file.body,
     };
-    return s3UploadClient.putObject(params).promise();
-  }));
+
+    codePipeline
+        .putJobSuccessResult(pipelineParams, function(err, data){
+            console.log('Err', err);
+            console.log('Data', data);
+            console.log('Done2');
+            context.done('Done done done');
+        });
+        // .promise()
+        // .then( () => {
+        //     console.log('Done');
+        //     context.done('Done done done');
+        // });
 }
