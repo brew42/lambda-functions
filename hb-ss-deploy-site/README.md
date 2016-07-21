@@ -27,6 +27,7 @@ This Lambda Function integrates with AWS CodePipeline to deploy the contents of 
         "staticSiteBucket": "BUCKET"
     }
 ```
+- Note that if using the online console your input field will look like this:  {"staticSiteRegion":"REGION","staticSiteBucket":"BUCKET"}
 
 ---
 
