@@ -3,18 +3,17 @@ var fs = require('fs');
 var path = require('path');
 var unzip = require('yauzl');
 var mkdirp = require('mkdirp');
+var mime = require('mime');
 var AWS = require('aws-sdk');
 var codePipeline = new AWS.CodePipeline();
 
 const filePath = '/tmp/artifact.zip', cwd = '/tmp';
-var lambdaContext;
 
-exports.handler = (event, context) => {
-    lambdaContext = context;
-    
+exports.handler = (event, context) => {    
     let job = event['CodePipeline.job'];
-    console.log('job', JSON.stringify(job));
+    console.log('Received CodePipeline job', JSON.stringify(job));
     let userParams = getUserParams(job);
+    console.log('With user parameters', JSON.stringify(userParams));
 
     let sourceClient = getSourceClient(job);
     let sourceBucket = getSourceBucket(job);
@@ -22,18 +21,28 @@ exports.handler = (event, context) => {
     
     getFiles(sourceClient, sourceBucket)
         .then(unzipFiles)
-        .then((files) => {
-            return Promise.all([files, uploadFiles(files, destinationClient)])
+        .then( (files) => {
+            return Promise.all([files, uploadFiles(files, destinationClient)]);
         })
-        .then(signalCodePipelineSuccess)
-        .catch( (err) => signalCodePipelineFailure(err) );
+        .then(() => {
+            return signalCodePipelineSuccess(job);
+        })
+        .then( () => {
+            return signalLambdaComplete(context);
+        })
+        .catch( (err) => {
+            signalCodePipelineFailure(job, err);
+            signalLambdaComplete(context, err);
+        });
 };
 
 function getUserParams(job){
+    console.log('Getting user parameters');
     return JSON.parse(job.data.actionConfiguration.configuration.UserParameters);
 }
 
 function getSourceClient(job){
+    console.log('Getting source client');
     return new AWS.S3({
         accessKeyId: job.data.artifactCredentials.accessKeyId,
         secretAccessKey: job.data.artifactCredentials.secretAccessKey,
@@ -42,16 +51,18 @@ function getSourceClient(job){
     });
 }
 
-//currently only allows for a single input artifact
+// currently only allows for a single input artifact
 function getSourceBucket(job){
+    console.log('Getting source bucket');
     return {
-        bucket: job.data.inputArtifacts[0].location.s3Location.bucketName,
-        key: job.data.inputArtifacts[0].location.s3Location.objectKey
+        Bucket: job.data.inputArtifacts[0].location.s3Location.bucketName,
+        Key: job.data.inputArtifacts[0].location.s3Location.objectKey
     }
 }
 
-function getDestinationClient(){
-return new AWS.S3({
+function getDestinationClient(userParams){
+    console.log('Getting destination client');
+    return new AWS.S3({
         region: userParams.staticSiteRegion,
         params: {
             Bucket: userParams.staticSiteBucket
@@ -76,7 +87,7 @@ var getFiles = (sourceClient, sourceBucket) => {
     });
 };
 
-//TODO this is nasty copy pasta from another project, can it be cleaned up?
+// TODO this is nasty copy pasta from another project, can it be cleaned up?
 var unzipFiles = () => {
     return new Promise((resolve, reject) => {
         console.log('Unzipping build artifact');
@@ -103,6 +114,7 @@ var unzipFiles = () => {
                             files.push({
                                 key: entry.fileName,
                                 body: fs.createReadStream(path.join(cwd, entry.fileName)),
+                                mimetype: mime.lookup(path.join(cwd, entry.fileName))
                             });
                             zipfile.readEntry();
                         });
@@ -123,21 +135,15 @@ var uploadFiles = (files, destinationClient) => {
         console.log('Uploading file');
         const params = {
             Key: file.key,
-            Body: file.body
+            Body: file.body,
+            ContentType: file.mimetype,
+            ACL: 'public-read'
         };
         return destinationClient.putObject(params).promise();
-    }))
+    }));
 };
 
-var signalLambdaComplete = () => {
-    return new Promise((resolve, reject) => {
-        console.log('Lambda is complete!');
-        lambdaContext.done();
-        resolve();
-    });
-};
-
-var signalCodePipelineSuccess = () => {
+var signalCodePipelineSuccess = (job) => {
     console.log('CodePipeline is complete!');
     let params = {
         jobId: job.id,
@@ -146,19 +152,25 @@ var signalCodePipelineSuccess = () => {
             revision: '1'
         }
     };
-    return codePipeline.putJobSuccessResult(params).promise()
-        .then(signalLambdaComplete);
+    return codePipeline.putJobSuccessResult(params).promise();
 };
 
-var signalCodePipelineFailure = (err) => {
-    console.log('CodePipeline is complete!');
+var signalCodePipelineFailure = (job, err) => {
     let params = {
-        jobId: jobId,
+        jobId: job.id,
         failureDetails: {
             message: JSON.stringify(err),
             type: 'JobFailed'
         }
     };
-    return codePipeline.putJobFailureResult(params).promise()
-        .then(signalLambdaComplete);
+    return codePipeline.putJobFailureResult(params).promise();
+};
+
+var signalLambdaComplete = (context, err) => {
+    return new Promise((resolve, reject) => {
+        var message = err ? err : 'Lambda is complete!';
+        console.log(message);
+        context.done(message);
+        resolve();
+    });
 };
