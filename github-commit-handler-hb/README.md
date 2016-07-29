@@ -1,4 +1,4 @@
-# Delete file from S3
+# GitHub commit handler
 This Lambda function receives and processes GitHub notification events.  On the Honey Badger project it is used with the [save remote file to S3](../save-remote-file-to-s3) and [Delete file from S3](../delete-file-from-s3) Lambda functions to keep our [CloudFormation templates](https://github.com/pariveda/honey-badger-cloud-formation) synced in an S3 bucket to faciliate easy CloudFormation execution.
 
 ---
@@ -15,13 +15,13 @@ This Lambda function receives and processes GitHub notification events.  On the 
 
 ---
 
-## Configuring the Lambda function to call [save remote file to S3](../save-remote-file-to-s3), and [delete file from S3](../delete-file-from-s3)
+## Configuring the Lambda function to call [save remote file to S3](../save-remote-file-to-s3) and [delete file from S3](../delete-file-from-s3)
 - Create a config folder in S3 with the folder name matching the Lambda function name
 - Create a properties.json file with the ARNs for the SNS topics that [save remote file to S3](../save-remote-file-to-s3) and [delete file from S3](../delete-file-from-s3) are subscribed to and place it in the config folder
 ```JSON
     {
-        "saveToS3ARN": "SAVE\_TO\_S3\_SNS\_ARN",
-        "deleteFromS3ARN": "DELETE\_FROM\_S3\_SNS\_ARN"
+        "saveToS3ARN": "SAVE_TO_S3_SNS_ARN",
+        "deleteFromS3ARN": "DELETE_FROM_S3_SNS_ARN"
     }
 ```
 
