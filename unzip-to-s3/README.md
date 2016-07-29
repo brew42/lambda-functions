@@ -1,7 +1,7 @@
 <!--
 Tags:  AWS, CodePipeline, Lambda Function, S3, Static Site Deploy
 -->
-# Honey Badger Static Site Deployment Script
+# Unzip to S3
 
 This Lambda Function integrates with AWS CodePipeline to deploy the contents of a zipped file to an S3 location.  The intended use case is to act as an invokable deploy stage of a pipeline for websites involving a build stage, but ultimately the function is agnostic to final use case and will deploy the contents of a given zip file to any specified S3 bucket.  The instructions that follow assume the intended use case.
 

@@ -1,5 +1,5 @@
 {
-  "name": "hb-delete-s3-file",
+  "name": "delete-file-from-s3",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
