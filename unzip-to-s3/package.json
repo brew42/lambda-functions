@@ -1,5 +1,5 @@
 {
-  "name": "hb-save-remote-file-to-s3",
+  "name": "unzip-to-s3",
   "version": "0.0.1",
   "description": "lambda function which receives URL of zipped static site contents and copies file to static site S3 bucket",
   "main": "index.js",
@@ -9,7 +9,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.4.0",
     "mime": "^1.3.4",
     "mkdirp": "^0.5.1",
     "yauzl": "^2.6.0"

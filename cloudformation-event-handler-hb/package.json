@@ -1,5 +1,5 @@
 {
-  "name": "hb-cf-event",
+  "name": "cloudformation-event-handler-hb",
   "version": "0.0.1",
   "description": "lambda function which receives sns notification of cloudfront event and passes along for additional notifications",
   "main": "index.js",
