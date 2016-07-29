@@ -1,5 +1,5 @@
 # CloudFormation event handler
-This Lambda Function integrates with CloudFormation to receive stack events and pass them along to an SNS topic for text notifications.  Currently the function is written to only pass along CREATE\_COMPLETE/CREATE\_FAILED and DELETE|_COMPLETE/DELETE\_FAILED events to minimize notifications.
+This Lambda Function integrates with CloudFormation to receive stack events and pass them along to an SNS topic for text notifications.  Currently the function is written to only pass along CREATE\_COMPLETE/CREATE\_FAILED and DELETE\_COMPLETE/DELETE\_FAILED events to minimize notifications.
 
 ---
 
