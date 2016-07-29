@@ -1,0 +1,11 @@
+{
+  "name": "hb-rds-dump",
+  "version": "0.0.1",
+  "description": "lambda function performs sql dump of production production rds instance to development and personal rds instances",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT"
+}
