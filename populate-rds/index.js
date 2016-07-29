@@ -27,7 +27,7 @@ exports.handler = function(event, context,callback) {
         function download(downloadNext) {
             var s3 = new AWS.S3();
             s3.getObject({
-                Bucket: "honey-badger-lambda-data",
+                Bucket: "honey-badger-data",
                 Key: "sweetskills.zip"
             }).createReadStream().pipe(fs.createWriteStream('/tmp/sweetskills.zip')).on('finish', function(err) {
                 if (err) {
