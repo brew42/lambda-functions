@@ -10,6 +10,11 @@ exports.handler = function(event, context,callback) {
 
 	console.log('REQUEST RECEIVED:\\n', JSON.stringify(event));
 
+    if (event.RequestType == 'Delete') {
+        response.send(event, context, response.SUCCESS);
+        return;
+    }
+
     var responseData = {};
     var script = "./pgsql/bin/psql -f /tmp/sweetskills/create_master.sql --dbname=postgresql://";
 
@@ -53,7 +58,7 @@ exports.handler = function(event, context,callback) {
                 if (error) {
                     console.log("Error execute script");
                     console.log(error);
-                    //response.send(event, context, response.FAILED, responseData);
+                    response.send(event, context, response.FAILED, responseData);
                 }
                 console.log(stdout);
                 console.log(stderr);
