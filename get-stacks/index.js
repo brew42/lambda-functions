@@ -49,7 +49,7 @@ function isNestedStack(stack){
 function getRootStackId(stack){
     var rootStackId;
     stack.Tags.forEach( (tag) => {
-        if( tag.Key === 'parentStackId' ){
+        if( tag.Key === 'rootStackId' ){
             rootStackId = tag.Value;
         }
     });
