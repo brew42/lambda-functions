@@ -7,6 +7,7 @@ var cloudFormation = new AWS.CloudFormation({
 exports.handler = (event, context, callback) => {
     
     describeStacks()
+        .then(convertToUIStacks)
         .then(getRootStacks)
         .then((stacks) => {
             console.log("Got root stacks");
@@ -67,6 +68,18 @@ function addNestedToRoot(nested, rootStacks){
         }
     });
     return rootStacks;
+}
+
+var convertToUIStacks = (stacks) => {
+    return new Promise( (resolve) => {
+        var uiStacks = stacks.map(convertToUIStack);
+        resolve(uiStacks);
+    });
+};
+
+function convertToUIStack(stack){
+    stack.NestedStacks = [];
+    return stack;
 }
 
 // cloudformation => sns/lambda => sms
