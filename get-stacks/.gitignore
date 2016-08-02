@@ -1,0 +1,5 @@
+# Zip package
+*.zip
+
+# Dependency directories
+node_modules

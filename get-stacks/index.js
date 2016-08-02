@@ -3,6 +3,7 @@ var AWS = require('aws-sdk');
 var cloudFormation = new AWS.CloudFormation({
     apiVersion: '2010-05-15'
 });
+var camelcase = require('camelcase-keys');
 
 exports.handler = (event, context, callback) => {
     
@@ -10,13 +11,10 @@ exports.handler = (event, context, callback) => {
         .then(convertToUIStacks)
         .then(getRootStacks)
         .then((stacks) => {
-            console.log("Got root stacks");
-            console.log(JSON.stringify(stacks));
-            context.succeed(stacks);
+            context.done(null, stacks);
         })
         .catch((err) => {
-            console.log('Error from lambda function', err);
-            context.done();
+            context.done(err);
         });
 };
 
@@ -25,11 +23,19 @@ var describeStacks = () => {
     return cloudFormation.describeStacks(params).promise();
 };
 
-var getRootStacks = (response) => {
+var convertToUIStacks = (response) => {
+    console.log(response);
+    return new Promise( (resolve) => {
+        var uiStacks = response.Stacks.map(convertToUIStack);
+        resolve(uiStacks);
+    });
+};
+
+var getRootStacks = (stacks) => {
     var rootStacks = [];
     var nestedStacks = [];
     return new Promise( (resolve) => {
-        response.Stacks.forEach( (stack) => {
+        stacks.forEach( (stack) => {
             if( isNestedStack(stack) ){
                 nestedStacks.push(stack);
             } else {
@@ -43,15 +49,24 @@ var getRootStacks = (response) => {
     });
 };
 
+function convertToUIStack(stack){
+    var uiStack = camelcase(stack);
+    uiStack.nestedStacks = [];
+    delete uiStack.capabilities;
+    delete uiStack.disableRollback;
+    delete uiStack.notificationARNs;
+    return uiStack;
+}
+
 function isNestedStack(stack){
     return getRootStackId(stack);
 }
 
 function getRootStackId(stack){
     var rootStackId;
-    stack.Tags.forEach( (tag) => {
-        if( tag.Key === 'rootStackId' ){
-            rootStackId = tag.Value;
+    stack.tags.forEach( (tag) => {
+        if( tag.key === 'rootStackId' ){
+            rootStackId = tag.value;
         }
     });
     return rootStackId;
@@ -60,26 +75,11 @@ function getRootStackId(stack){
 function addNestedToRoot(nested, rootStacks){
     var rootStackId = getRootStackId(nested);
     rootStacks.forEach( (rootStack) => {
-        if( rootStack.StackId === rootStackId ){
-            if( !rootStack.NestedStacks ){
-                rootStack.NestedStacks = [];
-            }
-            rootStack.NestedStacks.push(nested);
+        if( rootStack.stackId === rootStackId ){
+            rootStack.nestedStacks.push(nested);
         }
     });
     return rootStacks;
-}
-
-var convertToUIStacks = (stacks) => {
-    return new Promise( (resolve) => {
-        var uiStacks = stacks.map(convertToUIStack);
-        resolve(uiStacks);
-    });
-};
-
-function convertToUIStack(stack){
-    stack.NestedStacks = [];
-    return stack;
 }
 
 // cloudformation => sns/lambda => sms
