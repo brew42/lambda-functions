@@ -7,7 +7,7 @@ var camelcase = require('camelcase-keys');
 
 exports.handler = (event, context, callback) => {
     
-    describeStacks()
+    getStacks()
         .then(convertToUIStacks)
         .then(getRootStacks)
         .then((stacks) => {
@@ -18,13 +18,12 @@ exports.handler = (event, context, callback) => {
         });
 };
 
-var describeStacks = () => {
+var getStacks = () => {
     var params = {};
     return cloudFormation.describeStacks(params).promise();
 };
 
 var convertToUIStacks = (response) => {
-    console.log(response);
     return new Promise( (resolve) => {
         var uiStacks = response.Stacks.map(convertToUIStack);
         resolve(uiStacks);
@@ -83,8 +82,8 @@ function addNestedToRoot(nested, rootStacks){
 }
 
 // cloudformation => sns/lambda => sms
-// cloudformation => sns/lambda => upsert stack info in dynamodb?
-// s3 => api gateway/lambda => get from dynamodb?
+// cloudformation => sns/lambda => upsert stack info in dynamodb
+// s3 => api gateway/lambda => get from dynamodb
 
 // or
 
