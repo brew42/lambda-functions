@@ -9,7 +9,7 @@ exports.handler = (event, context, callback) => {
     
     getStacks()
         .then(convertToUIStacks)
-        .then(getRootStacks)
+        .then(nestStacks)
         .then((stacks) => {
             context.done(null, stacks);
         })
@@ -30,7 +30,7 @@ var convertToUIStacks = (response) => {
     });
 };
 
-var getRootStacks = (stacks) => {
+var nestStacks = (stacks) => {
     var rootStacks = [];
     var nestedStacks = [];
     return new Promise( (resolve) => {
