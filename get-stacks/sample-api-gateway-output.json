@@ -1,0 +1,1078 @@
+[
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills/412cdcd0-59e9-11e6-b746-50d5caf92cd2",
+        "stackName": "PhillipSweetSkills",
+        "description": "Sweet Skills Full Stack",
+        "parameters": [
+            {
+                "parameterKey": "DBInstanceClass",
+                "parameterValue": "db.t2.micro"
+            },
+            {
+                "parameterKey": "DomainName",
+                "parameterValue": "sweetskills.io"
+            },
+            {
+                "parameterKey": "HostedZoneId",
+                "parameterValue": "Z32UHIRQYRVUD0"
+            },
+            {
+                "parameterKey": "DBUserName",
+                "parameterValue": "sweetskillsUser"
+            },
+            {
+                "parameterKey": "Creator",
+                "parameterValue": "phillip"
+            },
+            {
+                "parameterKey": "DBListeningPort",
+                "parameterValue": "5432"
+            },
+            {
+                "parameterKey": "Initiative",
+                "parameterValue": "honey-badger"
+            },
+            {
+                "parameterKey": "NYOfficeCidr",
+                "parameterValue": "64.238.123.254/32"
+            },
+            {
+                "parameterKey": "DBStorageSize",
+                "parameterValue": "10"
+            },
+            {
+                "parameterKey": "Project",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "DBPassword",
+                "parameterValue": "****"
+            },
+            {
+                "parameterKey": "DBLambdaFunction",
+                "parameterValue": "populateRDS"
+            },
+            {
+                "parameterKey": "APIEC2KeyName",
+                "parameterValue": "honey-badger"
+            },
+            {
+                "parameterKey": "DBName",
+                "parameterValue": "sweetskillsDB"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "PrimaryAvailabilityZone",
+                "parameterValue": "us-east-1b"
+            },
+            {
+                "parameterKey": "APIEC2InstanceType",
+                "parameterValue": "t2.micro"
+            },
+            {
+                "parameterKey": "SecondaryAvailabilityZone",
+                "parameterValue": "us-east-1c"
+            },
+            {
+                "parameterKey": "VPCCidrBlock",
+                "parameterValue": "10.0.0.0/18"
+            }
+        ],
+        "creationTime": "2016-08-04T02:15:03.816Z",
+        "stackStatus": "CREATE_IN_PROGRESS",
+        "outputs": [],
+        "tags": [],
+        "nestedStacks": [
+            {
+                "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills-WebRouting-M8OLZ1QANM1U/bed7eca0-59ea-11e6-b746-50d5caf92cd2",
+                "stackName": "PhillipSweetSkills-WebRouting-M8OLZ1QANM1U",
+                "description": "Routing rules to use the subdomain and domain names for DNS lookup",
+                "parameters": [
+                    {
+                        "parameterKey": "FullDomainName",
+                        "parameterValue": "phillip.sweetskills.io"
+                    },
+                    {
+                        "parameterKey": "Project",
+                        "parameterValue": "sweet-skills"
+                    },
+                    {
+                        "parameterKey": "HostedZoneId",
+                        "parameterValue": "Z32UHIRQYRVUD0"
+                    },
+                    {
+                        "parameterKey": "Environment",
+                        "parameterValue": "personal"
+                    },
+                    {
+                        "parameterKey": "APIServerPublicIP",
+                        "parameterValue": "52.204.246.162"
+                    },
+                    {
+                        "parameterKey": "Initiative",
+                        "parameterValue": "honey-badger"
+                    }
+                ],
+                "creationTime": "2016-08-04T02:25:44.152Z",
+                "stackStatus": "CREATE_COMPLETE",
+                "outputs": [],
+                "tags": [
+                    {
+                        "key": "rootStackId",
+                        "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills/412cdcd0-59e9-11e6-b746-50d5caf92cd2"
+                    }
+                ],
+                "nestedStacks": []
+            },
+            {
+                "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills-Persistence-12JA7CVA5GGEQ/bec09410-59ea-11e6-8c26-500c524058f2",
+                "stackName": "PhillipSweetSkills-Persistence-12JA7CVA5GGEQ",
+                "description": "The Sweet Skills persistence stack.",
+                "parameters": [
+                    {
+                        "parameterKey": "DBInstanceClass",
+                        "parameterValue": "db.t2.micro"
+                    },
+                    {
+                        "parameterKey": "DBUserName",
+                        "parameterValue": "sweetskillsUser"
+                    },
+                    {
+                        "parameterKey": "DBListeningPort",
+                        "parameterValue": "5432"
+                    },
+                    {
+                        "parameterKey": "ApiSecurityGroupId",
+                        "parameterValue": "sg-8d8c64f7"
+                    },
+                    {
+                        "parameterKey": "NYOfficeCidr",
+                        "parameterValue": "64.238.123.254/32"
+                    },
+                    {
+                        "parameterKey": "DBStorageSize",
+                        "parameterValue": "10"
+                    },
+                    {
+                        "parameterKey": "DBPassword",
+                        "parameterValue": "****"
+                    },
+                    {
+                        "parameterKey": "VpcId",
+                        "parameterValue": "vpc-d03251b7"
+                    },
+                    {
+                        "parameterKey": "DBInstanceId",
+                        "parameterValue": "personal-sweetskillsDB-phillip"
+                    },
+                    {
+                        "parameterKey": "SecondaryDatabaseSubnetId",
+                        "parameterValue": "subnet-51d72318"
+                    },
+                    {
+                        "parameterKey": "PrimaryDatabaseSubnetId",
+                        "parameterValue": "subnet-911d19bb"
+                    },
+                    {
+                        "parameterKey": "DBName",
+                        "parameterValue": "sweetskillsDB"
+                    },
+                    {
+                        "parameterKey": "Environment",
+                        "parameterValue": "development"
+                    },
+                    {
+                        "parameterKey": "PrimaryAvailabilityZone",
+                        "parameterValue": "us-east-1b"
+                    },
+                    {
+                        "parameterKey": "SecondaryAvailabilityZone",
+                        "parameterValue": "us-east-1c"
+                    }
+                ],
+                "creationTime": "2016-08-04T02:25:44.003Z",
+                "stackStatus": "CREATE_IN_PROGRESS",
+                "outputs": [],
+                "tags": [
+                    {
+                        "key": "rootStackId",
+                        "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills/412cdcd0-59e9-11e6-b746-50d5caf92cd2"
+                    }
+                ],
+                "nestedStacks": []
+            },
+            {
+                "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills-APIServer-DXR3O9LYWPOU/c852f230-59e9-11e6-997e-50a686e4bb82",
+                "stackName": "PhillipSweetSkills-APIServer-DXR3O9LYWPOU",
+                "description": "Sweet Skills EC2 Server",
+                "parameters": [
+                    {
+                        "parameterKey": "Project",
+                        "parameterValue": "sweet-skills"
+                    },
+                    {
+                        "parameterKey": "VPCID",
+                        "parameterValue": "vpc-d03251b7"
+                    },
+                    {
+                        "parameterKey": "EC2InstanceType",
+                        "parameterValue": "t2.micro"
+                    },
+                    {
+                        "parameterKey": "Environment",
+                        "parameterValue": "personal"
+                    },
+                    {
+                        "parameterKey": "Creator",
+                        "parameterValue": "phillip"
+                    },
+                    {
+                        "parameterKey": "SubnetId",
+                        "parameterValue": "subnet-611d194b"
+                    },
+                    {
+                        "parameterKey": "EC2KeyName",
+                        "parameterValue": "honey-badger"
+                    },
+                    {
+                        "parameterKey": "Initiative",
+                        "parameterValue": "honey-badger"
+                    }
+                ],
+                "creationTime": "2016-08-04T02:18:50.964Z",
+                "stackStatus": "CREATE_COMPLETE",
+                "outputs": [
+                    {
+                        "outputKey": "APIServerPublicIp",
+                        "outputValue": "52.204.246.162"
+                    },
+                    {
+                        "outputKey": "ApiSecurityGroupId",
+                        "outputValue": "sg-8d8c64f7"
+                    }
+                ],
+                "tags": [
+                    {
+                        "key": "rootStackId",
+                        "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills/412cdcd0-59e9-11e6-b746-50d5caf92cd2"
+                    }
+                ],
+                "nestedStacks": []
+            },
+            {
+                "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills-Network-160Z7JI3NZ1X6/45795390-59e9-11e6-b098-50d5ca63268e",
+                "stackName": "PhillipSweetSkills-Network-160Z7JI3NZ1X6",
+                "description": "The Sweet Skills Network Infrastructure stack",
+                "parameters": [
+                    {
+                        "parameterKey": "Project",
+                        "parameterValue": "sweet-skills"
+                    },
+                    {
+                        "parameterKey": "Environment",
+                        "parameterValue": "personal"
+                    },
+                    {
+                        "parameterKey": "PrimaryAvailabilityZone",
+                        "parameterValue": "us-east-1b"
+                    },
+                    {
+                        "parameterKey": "SecondaryAvailabilityZone",
+                        "parameterValue": "us-east-1c"
+                    },
+                    {
+                        "parameterKey": "Initiative",
+                        "parameterValue": "honey-badger"
+                    },
+                    {
+                        "parameterKey": "NYOfficeCidr",
+                        "parameterValue": "64.238.123.254/32"
+                    },
+                    {
+                        "parameterKey": "VPCCidrBlock",
+                        "parameterValue": "10.0.0.0/18"
+                    }
+                ],
+                "creationTime": "2016-08-04T02:15:11.034Z",
+                "stackStatus": "CREATE_COMPLETE",
+                "outputs": [
+                    {
+                        "outputKey": "ApplicationSubnetId",
+                        "outputValue": "subnet-611d194b",
+                        "description": "The application subnet ID"
+                    },
+                    {
+                        "outputKey": "DatabaseSubnetId1",
+                        "outputValue": "subnet-911d19bb",
+                        "description": "The primary database subnet ID"
+                    },
+                    {
+                        "outputKey": "DatabaseSubnetId2",
+                        "outputValue": "subnet-51d72318",
+                        "description": "The secondary database subnet ID"
+                    },
+                    {
+                        "outputKey": "VPCID",
+                        "outputValue": "vpc-d03251b7",
+                        "description": "The VPC Id"
+                    }
+                ],
+                "tags": [
+                    {
+                        "key": "rootStackId",
+                        "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills/412cdcd0-59e9-11e6-b746-50d5caf92cd2"
+                    }
+                ],
+                "nestedStacks": []
+            },
+            {
+                "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills-WebHosting-13NEUDLZ7H2A2/456a3860-59e9-11e6-8118-500c20fafe62",
+                "stackName": "PhillipSweetSkills-WebHosting-13NEUDLZ7H2A2",
+                "description": "Sweet Skills S3 static site hosting",
+                "parameters": [
+                    {
+                        "parameterKey": "FullDomainName",
+                        "parameterValue": "phillip.sweetskills.io"
+                    },
+                    {
+                        "parameterKey": "Project",
+                        "parameterValue": "sweet-skills"
+                    },
+                    {
+                        "parameterKey": "HostedZoneId",
+                        "parameterValue": "Z32UHIRQYRVUD0"
+                    },
+                    {
+                        "parameterKey": "Environment",
+                        "parameterValue": "personal"
+                    },
+                    {
+                        "parameterKey": "Initiative",
+                        "parameterValue": "honey-badger"
+                    }
+                ],
+                "creationTime": "2016-08-04T02:15:10.945Z",
+                "stackStatus": "CREATE_COMPLETE",
+                "outputs": [
+                    {
+                        "outputKey": "WWWSiteURL",
+                        "outputValue": "http://www.phillip.sweetskills.io.s3-website-us-east-1.amazonaws.com",
+                        "description": "URL for www site hosted on S3"
+                    },
+                    {
+                        "outputKey": "NakedSiteURL",
+                        "outputValue": "http://phillip.sweetskills.io.s3-website-us-east-1.amazonaws.com",
+                        "description": "URL for naked site hosted on S3"
+                    },
+                    {
+                        "outputKey": "WWWSiteBucket",
+                        "outputValue": "www.phillip.sweetskills.io",
+                        "description": "Bucket for naked site hosted on S3"
+                    },
+                    {
+                        "outputKey": "NakedSiteBucket",
+                        "outputValue": "phillip.sweetskills.io",
+                        "description": "Bucket for naked site hosted on S3"
+                    }
+                ],
+                "tags": [
+                    {
+                        "key": "rootStackId",
+                        "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/PhillipSweetSkills/412cdcd0-59e9-11e6-b746-50d5caf92cd2"
+                    }
+                ],
+                "nestedStacks": []
+            }
+        ]
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paulcodedeploytest-UICodePipeline-10F6D346O002A/8edbc390-597d-11e6-8630-50d5cd24fac6",
+        "stackName": "paulcodedeploytest-UICodePipeline-10F6D346O002A",
+        "description": "CodePipeline provisioning for Sweet Skills UI",
+        "parameters": [
+            {
+                "parameterKey": "LambdaUIDeploy",
+                "parameterValue": "UnzipToS3"
+            },
+            {
+                "parameterKey": "ApplicationName",
+                "parameterValue": "paul-SweetSkills-UI"
+            },
+            {
+                "parameterKey": "JenkinsProject",
+                "parameterValue": "SweetSkillsUI"
+            },
+            {
+                "parameterKey": "Repo",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "ArtifactStore",
+                "parameterValue": "honey-badger-code-pipeline"
+            },
+            {
+                "parameterKey": "JenkinsProvider",
+                "parameterValue": "SweetSkillsJenkins"
+            },
+            {
+                "parameterKey": "Branch",
+                "parameterValue": "Webpack2"
+            },
+            {
+                "parameterKey": "RepoOwner",
+                "parameterValue": "pariveda"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "Creator",
+                "parameterValue": "paul"
+            },
+            {
+                "parameterKey": "GitHubToken",
+                "parameterValue": "****"
+            }
+        ],
+        "creationTime": "2016-08-03T13:24:08.565Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "StackName",
+                "outputValue": "paulcodedeploytest-UICodePipeline-10F6D346O002A"
+            }
+        ],
+        "tags": [],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paulcodedeploytest-APICodePipeline-1HN9I0HR9G3NK/8eb13120-597d-11e6-ae96-50d5ca6e60ae",
+        "stackName": "paulcodedeploytest-APICodePipeline-1HN9I0HR9G3NK",
+        "description": "CodePipeline provisioning for Sweet Skills API",
+        "parameters": [
+            {
+                "parameterKey": "ApplicationName",
+                "parameterValue": "paul-SweetSkills-API"
+            },
+            {
+                "parameterKey": "Repo",
+                "parameterValue": "sweet-skills-api"
+            },
+            {
+                "parameterKey": "ArtifactStore",
+                "parameterValue": "honey-badger-code-pipeline"
+            },
+            {
+                "parameterKey": "Branch",
+                "parameterValue": "master"
+            },
+            {
+                "parameterKey": "RepoOwner",
+                "parameterValue": "pariveda"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "GitHubToken",
+                "parameterValue": "****"
+            }
+        ],
+        "creationTime": "2016-08-03T13:24:08.227Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "StackName",
+                "outputValue": "paulcodedeploytest-APICodePipeline-1HN9I0HR9G3NK"
+            }
+        ],
+        "tags": [],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paulcodedeploytest-CodeDeploy-18XAEIS3OANZ5/523b7070-597d-11e6-910f-500c217dbe62",
+        "stackName": "paulcodedeploytest-CodeDeploy-18XAEIS3OANZ5",
+        "description": "CodeDeploy & group",
+        "parameters": [
+            {
+                "parameterKey": "ApplicationName",
+                "parameterValue": "paul-SweetSkills-API"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "Creator",
+                "parameterValue": "paul"
+            },
+            {
+                "parameterKey": "EC2IdentifyingKey",
+                "parameterValue": "name"
+            },
+            {
+                "parameterKey": "EC2IdentifyingKeyValue",
+                "parameterValue": "sweet-skills-api-ec2"
+            }
+        ],
+        "creationTime": "2016-08-03T13:22:26.796Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [],
+        "tags": [],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paulcodedeploytest/4f1fd890-597d-11e6-a584-50d5cad95262",
+        "stackName": "paulcodedeploytest",
+        "description": "CodePipeline setup for Sweet Skills API and UI",
+        "parameters": [
+            {
+                "parameterKey": "LambdaUIDeploy",
+                "parameterValue": "UnzipToS3"
+            },
+            {
+                "parameterKey": "ApplicationName",
+                "parameterValue": "SweetSkills"
+            },
+            {
+                "parameterKey": "APIBranch",
+                "parameterValue": "master"
+            },
+            {
+                "parameterKey": "APIRepo",
+                "parameterValue": "sweet-skills-api"
+            },
+            {
+                "parameterKey": "UIBranch",
+                "parameterValue": "Webpack2"
+            },
+            {
+                "parameterKey": "Creator",
+                "parameterValue": "paul"
+            },
+            {
+                "parameterKey": "EC2IdentifyingKeyValue",
+                "parameterValue": "sweet-skills-api-ec2"
+            },
+            {
+                "parameterKey": "JenkinsProjectUI",
+                "parameterValue": "SweetSkillsUI"
+            },
+            {
+                "parameterKey": "UIRepo",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "ArtifactStore",
+                "parameterValue": "honey-badger-code-pipeline"
+            },
+            {
+                "parameterKey": "BaseTemplateURL",
+                "parameterValue": "https://s3.amazonaws.com/honey-badger-cloud-formation/sweet-skills-continuous-delivery/"
+            },
+            {
+                "parameterKey": "JenkinsProvider",
+                "parameterValue": "SweetSkillsJenkins"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "UIRepoOwner",
+                "parameterValue": "pariveda"
+            },
+            {
+                "parameterKey": "EC2IdentifyingKey",
+                "parameterValue": "name"
+            },
+            {
+                "parameterKey": "APIRepoOwner",
+                "parameterValue": "pariveda"
+            },
+            {
+                "parameterKey": "GitHubToken",
+                "parameterValue": "****"
+            }
+        ],
+        "creationTime": "2016-08-03T13:22:21.621Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [],
+        "tags": [],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest-Persistence-1OSQIZ3E097DQ/254219f0-597a-11e6-8e85-500c32cd4462",
+        "stackName": "paultest-Persistence-1OSQIZ3E097DQ",
+        "description": "The Sweet Skills persistence stack.",
+        "parameters": [
+            {
+                "parameterKey": "DBInstanceClass",
+                "parameterValue": "db.t2.micro"
+            },
+            {
+                "parameterKey": "DBUserName",
+                "parameterValue": "sweetskillsUser"
+            },
+            {
+                "parameterKey": "DBListeningPort",
+                "parameterValue": "5432"
+            },
+            {
+                "parameterKey": "ApiSecurityGroupId",
+                "parameterValue": "sg-9d937de7"
+            },
+            {
+                "parameterKey": "NYOfficeCidr",
+                "parameterValue": "64.238.123.254/32"
+            },
+            {
+                "parameterKey": "DBStorageSize",
+                "parameterValue": "10"
+            },
+            {
+                "parameterKey": "DBPassword",
+                "parameterValue": "****"
+            },
+            {
+                "parameterKey": "VpcId",
+                "parameterValue": "vpc-b21171d5"
+            },
+            {
+                "parameterKey": "DBInstanceId",
+                "parameterValue": "personal-sweetskillsDB-paul"
+            },
+            {
+                "parameterKey": "SecondaryDatabaseSubnetId",
+                "parameterValue": "subnet-5b1ce912"
+            },
+            {
+                "parameterKey": "PrimaryDatabaseSubnetId",
+                "parameterValue": "subnet-65dbde4f"
+            },
+            {
+                "parameterKey": "DBName",
+                "parameterValue": "sweetskillsDB"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "development"
+            },
+            {
+                "parameterKey": "PrimaryAvailabilityZone",
+                "parameterValue": "us-east-1b"
+            },
+            {
+                "parameterKey": "SecondaryAvailabilityZone",
+                "parameterValue": "us-east-1c"
+            }
+        ],
+        "creationTime": "2016-08-03T12:59:42.871Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "DBMasterUserName",
+                "outputValue": "sweetskillsUser",
+                "description": "The database username"
+            },
+            {
+                "outputKey": "DBInstanceId",
+                "outputValue": "personal-sweetskillsDB-paul",
+                "description": "The database instance id"
+            },
+            {
+                "outputKey": "DBName",
+                "outputValue": "sweetskillsDB",
+                "description": "The database name"
+            },
+            {
+                "outputKey": "DBMasterPassword",
+                "outputValue": "Pariveda1",
+                "description": "The database password"
+            },
+            {
+                "outputKey": "DBListeningPort",
+                "outputValue": "5432",
+                "description": "The database listening port"
+            },
+            {
+                "outputKey": "DBAddress",
+                "outputValue": "personal-sweetskillsdb-paul.ciomibwrmoaq.us-east-1.rds.amazonaws.com",
+                "description": "The database address"
+            }
+        ],
+        "tags": [
+            {
+                "key": "parentStackId",
+                "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest/18807c40-5978-11e6-b705-50d501eb4c17"
+            },
+            {
+                "key": "parentStackName",
+                "value": "paultest"
+            }
+        ],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest-WebRouting-1GJYQQ5NGJ4JQ/24e5f030-597a-11e6-b442-500c28903236",
+        "stackName": "paultest-WebRouting-1GJYQQ5NGJ4JQ",
+        "description": "Routing rules to use the subdomain and domain names for DNS lookup",
+        "parameters": [
+            {
+                "parameterKey": "FullDomainName",
+                "parameterValue": "paul.sweetskills.io"
+            },
+            {
+                "parameterKey": "Project",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "HostedZoneId",
+                "parameterValue": "Z32UHIRQYRVUD0"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "APIServerPublicIP",
+                "parameterValue": "52.23.45.123"
+            },
+            {
+                "parameterKey": "Initiative",
+                "parameterValue": "honey-badger"
+            }
+        ],
+        "creationTime": "2016-08-03T12:59:42.226Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [],
+        "tags": [
+            {
+                "key": "parentStackId",
+                "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest/18807c40-5978-11e6-b705-50d501eb4c17"
+            },
+            {
+                "key": "parentStackName",
+                "value": "paultest"
+            }
+        ],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest-APIServer-VRM0PAF7A1ZQ/10897ea0-5979-11e6-9d5d-500c286f3262",
+        "stackName": "paultest-APIServer-VRM0PAF7A1ZQ",
+        "description": "Sweet Skills EC2 Server",
+        "parameters": [
+            {
+                "parameterKey": "Project",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "VPCID",
+                "parameterValue": "vpc-b21171d5"
+            },
+            {
+                "parameterKey": "EC2InstanceType",
+                "parameterValue": "t2.micro"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "Creator",
+                "parameterValue": "paul"
+            },
+            {
+                "parameterKey": "SubnetId",
+                "parameterValue": "subnet-7adbde50"
+            },
+            {
+                "parameterKey": "EC2KeyName",
+                "parameterValue": "honey-badger"
+            },
+            {
+                "parameterKey": "Initiative",
+                "parameterValue": "honey-badger"
+            }
+        ],
+        "creationTime": "2016-08-03T12:51:58.588Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "APIServerPublicIp",
+                "outputValue": "52.23.45.123"
+            },
+            {
+                "outputKey": "ApiSecurityGroupId",
+                "outputValue": "sg-9d937de7"
+            }
+        ],
+        "tags": [
+            {
+                "key": "parentStackId",
+                "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest/18807c40-5978-11e6-b705-50d501eb4c17"
+            },
+            {
+                "key": "parentStackName",
+                "value": "paultest"
+            }
+        ],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest-WebHosting-19XE5AHD8XV82/1c9fc880-5978-11e6-9438-500c2893c0d2",
+        "stackName": "paultest-WebHosting-19XE5AHD8XV82",
+        "description": "Sweet Skills S3 static site hosting",
+        "parameters": [
+            {
+                "parameterKey": "FullDomainName",
+                "parameterValue": "paul.sweetskills.io"
+            },
+            {
+                "parameterKey": "Project",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "HostedZoneId",
+                "parameterValue": "Z32UHIRQYRVUD0"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "Initiative",
+                "parameterValue": "honey-badger"
+            }
+        ],
+        "creationTime": "2016-08-03T12:45:09.382Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "WWWSiteURL",
+                "outputValue": "http://www.paul.sweetskills.io.s3-website-us-east-1.amazonaws.com",
+                "description": "URL for www site hosted on S3"
+            },
+            {
+                "outputKey": "NakedSiteURL",
+                "outputValue": "http://paul.sweetskills.io.s3-website-us-east-1.amazonaws.com",
+                "description": "URL for naked site hosted on S3"
+            },
+            {
+                "outputKey": "WWWSiteBucket",
+                "outputValue": "www.paul.sweetskills.io",
+                "description": "Bucket for naked site hosted on S3"
+            },
+            {
+                "outputKey": "NakedSiteBucket",
+                "outputValue": "paul.sweetskills.io",
+                "description": "Bucket for naked site hosted on S3"
+            }
+        ],
+        "tags": [
+            {
+                "key": "parentStackId",
+                "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest/18807c40-5978-11e6-b705-50d501eb4c17"
+            },
+            {
+                "key": "parentStackName",
+                "value": "paultest"
+            }
+        ],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest-Network-1CSXB691WIKXG/1c3546e0-5978-11e6-8c26-500c524058f2",
+        "stackName": "paultest-Network-1CSXB691WIKXG",
+        "description": "The Sweet Skills Network Infrastructure stack",
+        "parameters": [
+            {
+                "parameterKey": "Project",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "PrimaryAvailabilityZone",
+                "parameterValue": "us-east-1b"
+            },
+            {
+                "parameterKey": "SecondaryAvailabilityZone",
+                "parameterValue": "us-east-1c"
+            },
+            {
+                "parameterKey": "Initiative",
+                "parameterValue": "honey-badger"
+            },
+            {
+                "parameterKey": "NYOfficeCidr",
+                "parameterValue": "64.238.123.254/32"
+            },
+            {
+                "parameterKey": "VPCCidrBlock",
+                "parameterValue": "10.0.0.0/18"
+            }
+        ],
+        "creationTime": "2016-08-03T12:45:08.668Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "ApplicationSubnetId",
+                "outputValue": "subnet-7adbde50",
+                "description": "The application subnet ID"
+            },
+            {
+                "outputKey": "DatabaseSubnetId1",
+                "outputValue": "subnet-65dbde4f",
+                "description": "The primary database subnet ID"
+            },
+            {
+                "outputKey": "DatabaseSubnetId2",
+                "outputValue": "subnet-5b1ce912",
+                "description": "The secondary database subnet ID"
+            },
+            {
+                "outputKey": "VPCID",
+                "outputValue": "vpc-b21171d5",
+                "description": "The VPC Id"
+            }
+        ],
+        "tags": [
+            {
+                "key": "parentStackId",
+                "value": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest/18807c40-5978-11e6-b705-50d501eb4c17"
+            },
+            {
+                "key": "parentStackName",
+                "value": "paultest"
+            }
+        ],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/paultest/18807c40-5978-11e6-b705-50d501eb4c17",
+        "stackName": "paultest",
+        "description": "Sweet Skills Full Stack",
+        "parameters": [
+            {
+                "parameterKey": "DBInstanceClass",
+                "parameterValue": "db.t2.micro"
+            },
+            {
+                "parameterKey": "DomainName",
+                "parameterValue": "sweetskills.io"
+            },
+            {
+                "parameterKey": "HostedZoneId",
+                "parameterValue": "Z32UHIRQYRVUD0"
+            },
+            {
+                "parameterKey": "DBUserName",
+                "parameterValue": "sweetskillsUser"
+            },
+            {
+                "parameterKey": "Creator",
+                "parameterValue": "paul"
+            },
+            {
+                "parameterKey": "DBListeningPort",
+                "parameterValue": "5432"
+            },
+            {
+                "parameterKey": "Initiative",
+                "parameterValue": "honey-badger"
+            },
+            {
+                "parameterKey": "NYOfficeCidr",
+                "parameterValue": "64.238.123.254/32"
+            },
+            {
+                "parameterKey": "DBStorageSize",
+                "parameterValue": "10"
+            },
+            {
+                "parameterKey": "Project",
+                "parameterValue": "sweet-skills"
+            },
+            {
+                "parameterKey": "DBPassword",
+                "parameterValue": "****"
+            },
+            {
+                "parameterKey": "DBLambdaFunction",
+                "parameterValue": "populateRDS"
+            },
+            {
+                "parameterKey": "APIEC2KeyName",
+                "parameterValue": "honey-badger"
+            },
+            {
+                "parameterKey": "DBName",
+                "parameterValue": "sweetskillsDB"
+            },
+            {
+                "parameterKey": "Environment",
+                "parameterValue": "personal"
+            },
+            {
+                "parameterKey": "PrimaryAvailabilityZone",
+                "parameterValue": "us-east-1b"
+            },
+            {
+                "parameterKey": "APIEC2InstanceType",
+                "parameterValue": "t2.micro"
+            },
+            {
+                "parameterKey": "SecondaryAvailabilityZone",
+                "parameterValue": "us-east-1c"
+            },
+            {
+                "parameterKey": "VPCCidrBlock",
+                "parameterValue": "10.0.0.0/18"
+            }
+        ],
+        "creationTime": "2016-08-03T12:45:02.453Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "VPCId",
+                "outputValue": "vpc-b21171d5"
+            }
+        ],
+        "tags": [],
+        "nestedStacks": []
+    },
+    {
+        "stackId": "arn:aws:cloudformation:us-east-1:207377804245:stack/JenkinsBuildActionRegistration/899613b0-5372-11e6-91ed-500c524294d2",
+        "stackName": "JenkinsBuildActionRegistration",
+        "description": "Custom Jenkins CodePipeline action",
+        "parameters": [
+            {
+                "parameterKey": "JenkinsProviderName",
+                "parameterValue": "SweetSkillsJenkins"
+            },
+            {
+                "parameterKey": "JenkinsURL",
+                "parameterValue": "http://jenkins.sweetskills.io"
+            }
+        ],
+        "creationTime": "2016-07-26T20:50:08.217Z",
+        "stackStatus": "CREATE_COMPLETE",
+        "outputs": [
+            {
+                "outputKey": "JenkinsBuildName",
+                "outputValue": "Jenki-Jenki-1D3L7QGRV9RKI"
+            }
+        ],
+        "tags": [],
+        "nestedStacks": []
+    }
+]
