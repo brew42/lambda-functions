@@ -25,8 +25,7 @@ var getStacks = () => {
 
 var convertToUIStacks = (response) => {
     return new Promise( (resolve) => {
-        var uiStacks = response.Stacks.map(convertToUIStack);
-        resolve(uiStacks);
+        resolve(response.Stacks.map(convertToUIStack));
     });
 };
 
@@ -50,6 +49,10 @@ var nestStacks = (stacks) => {
 
 function convertToUIStack(stack){
     var uiStack = camelcase(stack);
+    uiStack.parameters = camelCaseItems(uiStack.parameters);
+    uiStack.outputs = camelCaseItems(uiStack.outputs);
+    uiStack.tags = camelCaseItems(uiStack.tags);
+
     uiStack.nestedStacks = [];
     delete uiStack.capabilities;
     delete uiStack.disableRollback;
@@ -79,6 +82,14 @@ function addNestedToRoot(nested, rootStacks){
         }
     });
     return rootStacks;
+}
+
+function camelCaseItems(items){
+    var camelCased = [];
+    items.forEach( (item) => {
+        camelCased.push(camelcase(item));
+    });
+    return camelCased;
 }
 
 // cloudformation => sns/lambda => sms
