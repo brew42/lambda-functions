@@ -7,6 +7,8 @@ var unzip = require('unzip');
 var async = require('async');
 
 var script = "./pgsql/bin/psql -f /tmp/sweetskills/create_master.sql --dbname=postgresql://";
+var DBS3Bucket = "";
+var DBS3Key = "";
 
 exports.handler = (event, context,callback) => {
 
@@ -23,7 +25,9 @@ exports.handler = (event, context,callback) => {
     var DBAddress = event.ResourceProperties.DBAddress;
     var DBListeningPort = event.ResourceProperties.DBListeningPort;
     var DBName = event.ResourceProperties.DBName;
-    
+    DBS3Bucket = event.ResourceProperties.DBS3Bucket;
+    DBS3Key = event.ResourceProperties.DBS3Key;
+
     script = script + DBMasterUserName + ":" + DBMasterPassword + "@" + DBAddress + ":" + DBListeningPort + "/" + DBName;
 
     download()
@@ -41,8 +45,8 @@ function download() {
     var s3 = new AWS.S3();
     return new Promise((resolve) => {
         s3.getObject({
-            Bucket: "honey-badger-data",
-            Key: "sweetskills.zip"
+            Bucket: DBS3Bucket,
+            Key: DBS3Key
         })
         .createReadStream()
         .pipe(fs.createWriteStream('/tmp/sweetskills.zip')
