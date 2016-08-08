@@ -6,7 +6,7 @@ var fs = require('fs');
 var unzip = require('unzip');
 var async = require('async');
 
-var script = "./pgsql/bin/psql -f /tmp/sweetskills/create_master.sql --dbname=postgresql://";
+var script = "";
 var DBS3Bucket = "";
 var DBS3Key = "";
 
@@ -28,7 +28,7 @@ exports.handler = (event, context,callback) => {
     DBS3Bucket = event.ResourceProperties.DBS3Bucket;
     DBS3Key = event.ResourceProperties.DBS3Key;
 
-    script = script + DBMasterUserName + ":" + DBMasterPassword + "@" + DBAddress + ":" + DBListeningPort + "/" + DBName;
+    script = "./pgsql/bin/psql -f /tmp/sweetskills/create_master.sql --dbname=postgresql://" + DBMasterUserName + ":" + DBMasterPassword + "@" + DBAddress + ":" + DBListeningPort + "/" + DBName;
 
     download()
         .then(open)
