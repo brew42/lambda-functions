@@ -1,5 +1,5 @@
 {
-  "name": "delete-bucket-from-s3",
+  "name": "empty-s3-bucket",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
