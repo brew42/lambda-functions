@@ -59,7 +59,7 @@ var setConfig = (configFile) => {
 var getFiles = () => {
     return new Promise(function(resolve){
         let repository = githubEvent.repository.full_name;
-        let bucket = githubEvent.repository.name;        
+        let bucket = CONFIG.s3Bucket;     
         
         let files = [];
 
