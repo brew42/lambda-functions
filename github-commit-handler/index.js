@@ -5,7 +5,7 @@ var s3 = new AWS.S3({
     region: 'us-east-1',
     signatureVersion: 'v2' });
 
-var CONFIG, githubEvent, s3Bucket;
+var CONFIG, githubEvent;
 
 exports.handler = (event, context, callback) => {
     githubEvent = getSNSMessage(event);    
