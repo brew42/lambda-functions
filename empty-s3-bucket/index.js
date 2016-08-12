@@ -14,7 +14,7 @@ exports.handler = (event, context, callback) => {
           (err) => {
             if(err) {
                 console.log("error: ", err);
-                response.send(event, context, response.FAILED);
+                response.send(event, context, response.SUCCESS);
             }
             else {
               response.send(event, context, response.SUCCESS);
