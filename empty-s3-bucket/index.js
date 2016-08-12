@@ -33,9 +33,9 @@ function emptyBucket(bucketName,callback){
     Bucket: bucketName,
   };
 
-  s3.headBucket(params, (err) => {
-    if(err) => {
-      console.log("Bucket Exist or permission Error: ", err);
+  s3.headBucket(params, function(err, data) {
+    if (err){
+      console.log("Bucket Exist or Permission Error: ", err);
       return;
     }
   });
