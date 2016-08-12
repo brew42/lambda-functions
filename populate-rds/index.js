@@ -4,7 +4,6 @@ var response = require('response.js');
 var AWS = require('aws-sdk');
 var fs = require('fs');
 var unzip = require('unzip');
-var async = require('async');
 
 var script = "";
 var DBS3Bucket = "";
