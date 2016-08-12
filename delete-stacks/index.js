@@ -4,7 +4,7 @@ var cloudFormation = new AWS.CloudFormation({
     apiVersion: '2010-05-15'
 });
 
-var stackStatus = ['CREATE_COMPLETE', 'CREATE_FAILED', 'UPDATE_COMPLETE', 'DELETE_FAILED'];
+var stackStatus = ['CREATE_COMPLETE', 'CREATE_IN_PROGRESS', 'CREATE_FAILED', 'UPDATE_COMPLETE', 'DELETE_FAILED'];
 
 exports.handler = (event, context, callback) => {
     console.log('REQUEST RECEIVED:\\n', JSON.stringify(event));
