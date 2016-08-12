@@ -10,7 +10,8 @@ exports.handler = (event, context, callback) => {
     console.log('REQUEST RECEIVED:\\n', JSON.stringify(event));
 
     if (event.RequestType == 'Delete') {
-        emptyBucket(event.ResourceProperties.BucketName, (err) => {
+        emptyBucket(event.ResourceProperties.BucketName,
+          (err) => {
             if(err) {
                 console.log("error: ", err);
                 response.send(event, context, response.FAILED);
@@ -32,6 +33,13 @@ function emptyBucket(bucketName,callback){
     Bucket: bucketName,
   };
 
+  s3.headBucket(params, (err) => {
+    if(err) => {
+      console.log("Bucket Exist or permission Error: ", err);
+      return;
+    }
+  });
+
   s3.listObjects(params, function(err, data) {
     if (err) return callback(err);
 
@@ -51,3 +59,5 @@ function emptyBucket(bucketName,callback){
     });
   });
 }
+
+
