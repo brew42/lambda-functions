@@ -32,31 +32,35 @@ function emptyBucket(bucketName,callback){
   var params = {
     Bucket: bucketName,
   };
-
-  s3.headBucket(params, function(err, data) {
-    if (err){
-      console.log("Bucket Exist or Permission Error: ", err);
-      return;
+  console.log("Bucket: ", params.Bucket);
+  s3.listObjectsV2(params, function(err, data) {
+    if (err) {
+      return callback(err);
     }
-  });
+    else if (data.Contents.length == 0) {
+      return callback();
+    }
+    else {
+      params = {Bucket: bucketName};
+      params.Delete = {Objects:[]};
 
-  s3.listObjects(params, function(err, data) {
-    if (err) return callback(err);
+      data.Contents.forEach(function(content) {
+        console.log("Deleting Object: ", content.Key);
+        params.Delete.Objects.push({Key: content.Key});
+      });
 
-    if (data.Contents.length == 0) callback();
-
-    params = {Bucket: bucketName};
-    params.Delete = {Objects:[]};
-
-    data.Contents.forEach(function(content) {
-      params.Delete.Objects.push({Key: content.Key});
-    });
-
-    s3.deleteObjects(params, function(err, data) {
-      if (err) return callback(err);
-      if(data.Deleted.length == 1000)emptyBucket(bucketName,callback);
-      else callback();
-    });
+      s3.deleteObjects(params, function(err, data) {
+        if (err) {
+          return callback(err);
+        }
+        else if(data.Deleted.length == 1000) {
+          emptyBucket(bucketName,callback);
+        }
+        else {
+          return callback();
+        }
+      });
+    }
   });
 }
 
