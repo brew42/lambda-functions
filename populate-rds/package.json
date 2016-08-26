@@ -7,5 +7,8 @@
     "test": "test"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "unzip": "^0.1.11"
+  }
 }
