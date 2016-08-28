@@ -11,12 +11,16 @@ var cloudFormation = new AWS.CloudFormation({
 //     apiVersion: '2006-03-01'
 // });
 
+var trigger;
+
 exports.handler = (event, context, callback) => {
-    
-    //TODO get trigger - daily or weekend destroy
+
+    console.log('cloudwatch event', event);
+    trigger = event.schedule.toUpperCase();
 
     getAllStacks()
-        .then(filterStacksToDestroy)
+        .then(responseToJson)
+        .then(filterStacksByDestroyPolicy)
         .then(destroyStacks)
         .then((result) => {
             console.log('Result from lambda function: ', result);
@@ -30,21 +34,33 @@ exports.handler = (event, context, callback) => {
 
 var getAllStacks = () => {
     var params = {
-        FunctionName: 'get-stacks'
+        FunctionName: 'GetStacks'
     };
     return lambda.invoke(params).promise();
 };
 
-var filterStacksToDestroy = (stacks) => {
+var responseToJson = (response) => {
     return new Promise( (resolve) => {
-        // only return app hosting stacks not code pipeline, jenkins, etc
-        // only return stacks with an autodelete that matches the trigger
+        var stacks = JSON.parse(response.Payload);
+        resolve(stacks);
+    });
+};
+
+var filterStacksByDestroyPolicy = (stacks) => {
+    return new Promise( (resolve) => {
         var filtered = stacks.filter((stack) => {
-            return stack;
+            return stackDestroyPolicyMatchesTrigger(stack);
         });
         resolve(filtered);
     });
 };
+
+var stackDestroyPolicyMatchesTrigger = (stack) => {
+    var stackDestroyPolicy = stack.outputs.find( (output) => {
+        return output.outputKey.toUpperCase() === 'AUTODESTROYPOLICY';
+    });
+    return stackDestroyPolicy && stackDestroyPolicy.outputValue.toUpperCase() === trigger;
+}
 
 var destroyStacks = (stacks) => {
     return Promise.all(stacks.map(destroyStack));
@@ -54,7 +70,8 @@ var destroyStack = (stack) => {
     var params = {
         StackName: stack.stackName
     };
-    return cloudformation.deleteStack(params).promise();
+    console.log('destroy this stack', params);
+    return cloudFormation.deleteStack(params).promise();
 }
 
 // var emptySiteBuckets = (stacks) => {
