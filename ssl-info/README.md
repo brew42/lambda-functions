@@ -1,19 +1,17 @@
-# Populate Amazon RDS Database
-This Lambda function is a utility for populating a newly created RDS Database, it is written in nodejs v4.x, relies on synchronization to perform scripting, and includes the postgresql v9.5 binaries for linix
+# Get SSL Certificates
+This Lambda function returns SSL certificate info to Cloudformation
 
 ---
-
 ## Lambda function and [CloudFormation](https://github.com/pariveda/honey-badger-cloud-formation)
-- Lambda function is statically defined and therefore needs to be manually updated.  Zip up the contents of this repository and upload to an S3 bucket (honey-badger-lambda-functions/sweetskills/populate-rds). Update the code of the lambda function with the URL of the .zip file in the S3 bucket 
-- A custom resource in _full-stack.template passes the database name, user name, password, host, and port number of a newly created RDS stack to the lambda function
+- Lambda function pulls certificate files from s3 bucket and returns the information to Cloudformation.
+- Cloudformation uses the information to set up a CloudFront Distribution and to request additional SSL certificates from letsencrypt
 
 ---
 ## How the Lambda function works
-- AWS-SDK is used to download the zipped sql files from an S3 bucket to the local lambda environment
-- Files are unzipped and then a script populates the database using the psql executable included with the lambda function
-- A response is sent to the CloudFormation stack to indicate that the lambda function has finished execution and that the stack can continue creation
+- AWS-SDK is used to download the files from an S3 bucket to the local lambda environment
+- Files read and the contents are ouput to the CloudFormation stack
+- A response is sent to the CloudFormation stack containing the file outputs and indicating that the lambda function has finished execution and that the stack can continue creation
 
 ---
-
 ### Additional fields & features
 If you would like to see additional features please create an issue or pull request
