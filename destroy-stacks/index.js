@@ -15,7 +15,6 @@ var trigger;
 
 exports.handler = (event, context, callback) => {
 
-    console.log('cloudwatch event', event);
     trigger = event.schedule.toUpperCase();
 
     getAllStacks()
@@ -70,7 +69,7 @@ var destroyStack = (stack) => {
     var params = {
         StackName: stack.stackName
     };
-    console.log('destroy this stack', params);
+    console.log(`auto destroying stack ${stack.stackName} from trigger ${trigger}`);
     return cloudFormation.deleteStack(params).promise();
 }
 
