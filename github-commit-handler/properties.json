@@ -1,0 +1,5 @@
+{
+    "saveToS3ARN": "arn:aws:sns:{AWS::Region}:{AWS::AccoutId}:SaveRemoteFileToS3",
+    "deleteFromS3ARN": "arn:aws:{AWS::Region}:{AWS::AccoutId}:DeleteFileFromS3",
+    "s3Bucket" : "honey-badger-cloud-formation"
+}
