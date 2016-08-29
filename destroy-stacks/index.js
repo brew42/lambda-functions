@@ -6,10 +6,6 @@ var lambda = new AWS.Lambda({
 var cloudFormation = new AWS.CloudFormation({
     apiVersion: '2010-05-15'
 });
-// var s3 = new AWS.S3({
-//     region: 'us-east-1',
-//     apiVersion: '2006-03-01'
-// });
 
 var trigger;
 
@@ -72,35 +68,3 @@ var destroyStack = (stack) => {
     console.log(`auto destroying stack ${stack.stackName} from trigger ${trigger}`);
     return cloudFormation.deleteStack(params).promise();
 }
-
-// var emptySiteBuckets = (stacks) => {
-//     return new Promise( (resolve) => {
-//         Promise.all( stacks.map( (stack) => emptySiteBucket(stack) ))
-//             .then( () => { resolve(stacks) });
-//     })
-//     // return Promise.all( stacks.map( (stack) => emptySiteBucket(stack) ));
-// };
-
-// var emptySiteBucket = (stack) => {
-//     return getBucketObjects(stack).then(deleteBucketObjects);
-// };
-
-// var getBucketObjects = (stack) => {
-//     var params = {
-//         Bucket: ''
-//     }
-//     return s3.listObjectsV2(params).promise();
-// };
-
-// var deleteBucketObjects = (bucketData) => {
-//     var objects = bucketData.Contents.map( (object) => {
-//         return { Key: object.key }
-//     });
-//     var params = {
-//         Bucket: bucketData.Name,
-//         Delete: {
-//             Objects: objects
-//         }
-//     }
-//     return s3.deleteObjects(params).promise();
-// }
