@@ -21,7 +21,8 @@ This Lambda function receives and processes GitHub notification events.  On the 
 ```JSON
     {
         "saveToS3ARN": "SAVE_TO_S3_SNS_ARN",
-        "deleteFromS3ARN": "DELETE_FROM_S3_SNS_ARN"
+        "deleteFromS3ARN": "DELETE_FROM_S3_SNS_ARN",
+        "s3Bucket" : "S3_BUCKET_FOR_CLOUD_FORMATION_TEMPLATES"
     }
 ```
 
