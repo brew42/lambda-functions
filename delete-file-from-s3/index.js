@@ -1,7 +1,8 @@
 'use strict'
 var AWS = require('aws-sdk');
-var s3 = new AWS.S3({
-    region: 'us-east-1'
+var s3 = new AWS.S3({ 
+    region: 'us-east-1',
+    apiVersion: '2006-03-01'
 });
 
 exports.handler = (event, context, callback) => {

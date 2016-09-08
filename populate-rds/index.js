@@ -2,6 +2,11 @@
 
 var response = require('response.js');
 var AWS = require('aws-sdk');
+var s3 = new AWS.S3({ 
+    region: 'us-east-1', 
+    apiVersion: '2006-03-01'
+     });
+
 var fs = require('fs');
 var unzip = require('unzip');
 
@@ -41,7 +46,6 @@ exports.handler = (event, context,callback) => {
 }
 
 function download() {
-    var s3 = new AWS.S3();
     return new Promise((resolve) => {
         s3.getObject({
             Bucket: DBS3Bucket,
