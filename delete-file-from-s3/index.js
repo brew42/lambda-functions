@@ -4,6 +4,7 @@ var s3 = new AWS.S3({
     region: 'us-east-1'
 });
 
+
 exports.handler = (event, context, callback) => {
     var fileInfo = getSNSMessage(event);
     
