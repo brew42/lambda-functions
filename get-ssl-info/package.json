@@ -1,0 +1,14 @@
+{
+  "name": "ssl-info",
+  "version": "0.0.1",
+  "description": "lambda function returns ssl info to the CF script",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "unzip": "^0.1.11"
+  }
+}
