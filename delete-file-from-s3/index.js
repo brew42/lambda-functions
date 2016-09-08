@@ -5,6 +5,7 @@ var s3 = new AWS.S3({
     apiVersion: '2006-03-01'
 });
 
+
 exports.handler = (event, context, callback) => {
     var fileInfo = getSNSMessage(event);
     

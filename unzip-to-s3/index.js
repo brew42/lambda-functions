@@ -5,7 +5,7 @@ var unzip = require('yauzl');
 var mkdirp = require('mkdirp');
 var mime = require('mime');
 var AWS = require('aws-sdk');
-var codePipeline = new AWS.CodePipeline();
+var codePipeline = new AWS.CodePipeline();  
 
 const filePath = '/tmp/artifact.zip', cwd = '/tmp';
 
