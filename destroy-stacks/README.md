@@ -1,12 +1,12 @@
 # Autodelete stacks
-This Lambda Function is triggered by a CloudWatch scheduled event (chron job) to automatically delete stacks on a predetermined schedule in order to save on resource costs.
+This Lambda Function is triggered by a CloudWatch scheduled event ([cron](https://en.wikipedia.org/wiki/Cron) job) to automatically delete stacks on a predetermined schedule in order to save on resource costs.
 
 ### Dependency:  Create CloudWatch scheduled event to work as a trigger
 As implemented in [Sweet Skills CloudFormation](http://github.com/sweetskills/cloud-formation) there are three auto destroy policies:  Never, Daily, and Weekend.  The Never case results in a stack that will, as the name implies, never be auto destroyed.  The Daily policy indicates that a stack should be auto destroyed at the end of each day, and Weekend indicates auto destruction at the end of each Friday.
 
 To enable this workflow we need to create CloudWatch scheduled events and use them to trigger this Lambda Function.
 
-The chron schedules are:
+The [cron](https://en.wikipedia.org/wiki/Cron) schedules are:
 - Daily:    0 22 ? * * *
 - Weekend:  0 22 ? * FRI *
 
