@@ -49,6 +49,10 @@ var nestObjects = (values) => {
     let stickers = values[1].Items;
     let badges = values[2].Items;
     let projects = values[3].Items;
+    console.log('Users:', users);
+    console.log('Stickers:', stickers);
+    console.log('Badges:', badges);
+    console.log('Projects:', projects);
 
     return addBadgesToStickers(stickers, badges)
                 .then( stickers => addProjectToStickers(stickers, projects) )
@@ -77,11 +81,13 @@ var addProjectToStickers = (stickers, projects) => {
 var addStickersToUsers = (users, stickers) => {
     stickers.forEach( sticker => {
         let user = users.find( user => user.id === sticker.userId );
-        delete sticker.userId;
-        if(!user.stickers){
-            user.stickers = [];
+        if(user){
+            delete sticker.userId;
+            if(!user.stickers){
+                user.stickers = [];
+            }
+            user.stickers.push(sticker);
         }
-        user.stickers.push(sticker);
     });
     return new Promise( resolve => resolve(users) );
 };

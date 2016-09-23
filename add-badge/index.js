@@ -7,26 +7,25 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 exports.handler = (event, context, callback) => {
 
     let params = event;
-    console.log('Received create sticker request with params: ', event);
+    console.log('Received create badge request with params: ', event);
     
-    saveSticker(params)
+    saveBadge(params)
         .then(() => {
-            context.done(null, { message: "Sticker created successfully" });
+            context.done(null, { message: "Badge created successfully" });
         })
         .catch((err) => {
             context.done(err);
         });
 };
 
-var saveSticker = (sticker) => {
+var saveBadge = (badge) => {
 
-    sticker.id = generateUUID();
-    sticker.badgeIdProjectId = sticker.badgeId + sticker.projectId;
-    sticker.created = (new Date()).toString();
+    badge.id = generateUUID();
+    badge.created = (new Date()).toString();
 
     var params = {
-        TableName: "testthree-StickerTable",
-        Item: sticker
+        TableName: "testthree-BadgeTable",
+        Item: badge
     };
     return docClient.put(params).promise();
 };
