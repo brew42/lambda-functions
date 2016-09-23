@@ -59,6 +59,7 @@ var addBadgesToStickers = (stickers, badges) => {
     stickers.forEach( sticker => {
         let badge = badges.find( badge => badge.id === sticker.badgeId );
         delete sticker.badgeId;
+        delete sticker.badgeIdProjectId;
         sticker.badge = badge;
     });
     return new Promise( resolve => resolve(stickers) );
