@@ -55,8 +55,8 @@ var nestObjects = (values) => {
     console.log('Projects:', projects);
 
     return addBadgesToStickers(stickers, badges)
-                .then( stickers => addProjectToStickers(stickers, projects) )
                 .then( stickers => addStickersToUsers(users, stickers) )
+                .then( stickers => addProjectsToStickers(stickers, projects) );
 };
 
 var addBadgesToStickers = (stickers, badges) => {
@@ -69,16 +69,22 @@ var addBadgesToStickers = (stickers, badges) => {
     return new Promise( resolve => resolve(stickers) );
 };
 
-var addProjectToStickers = (stickers, projects) => {
-    stickers.forEach( sticker => {
-        let project = projects.find( project => project.id === sticker.projectId );
-        delete sticker.projectId;
-        sticker.project = project;
+var addStickersToUsers = (users, stickers, badges, projects) => {
+    users.forEach( user => {
+        let stickersByUser = stickers.filter( sticker => sticker.userId === user.id );
+        badges.forEach( badge => {
+            let stickersByBadgeAndUser = stickersByUser.filter( sticker => sticker.badgeId === badge.id );
+            if(!user.stickers){
+                user.stickers = [];
+            }
+            stickersByBadgeAndUser
+            user.stickers.push({
+                badge: badge,
+                projects: userBadgeProjects
+            })
+        });
     });
-    return new Promise( resolve => resolve(stickers) );
-};
 
-var addStickersToUsers = (users, stickers) => {
     stickers.forEach( sticker => {
         let user = users.find( user => user.id === sticker.userId );
         if(user){
@@ -90,4 +96,13 @@ var addStickersToUsers = (users, stickers) => {
         }
     });
     return new Promise( resolve => resolve(users) );
+};
+
+var addProjectsToStickers = (stickers, projects) => {
+    stickers.forEach( sticker => {
+        let project = projects.find( project => project.id === sticker.projectId );
+        delete sticker.projectId;
+        sticker.project = project;
+    });
+    return new Promise( resolve => resolve(stickers) );
 };
