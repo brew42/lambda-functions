@@ -54,55 +54,25 @@ var nestObjects = (values) => {
     console.log('Badges:', badges);
     console.log('Projects:', projects);
 
-    return addBadgesToStickers(stickers, badges)
-                .then( stickers => addStickersToUsers(users, stickers) )
-                .then( stickers => addProjectsToStickers(stickers, projects) );
-};
-
-var addBadgesToStickers = (stickers, badges) => {
-    stickers.forEach( sticker => {
-        let badge = badges.find( badge => badge.id === sticker.badgeId );
-        delete sticker.badgeId;
-        delete sticker.badgeIdProjectId;
-        sticker.badge = badge;
-    });
-    return new Promise( resolve => resolve(stickers) );
+    return addStickersToUsers(users, stickers, badges, projects);
 };
 
 var addStickersToUsers = (users, stickers, badges, projects) => {
     users.forEach( user => {
-        let stickersByUser = stickers.filter( sticker => sticker.userId === user.id );
+        user.stickers = [];
         badges.forEach( badge => {
-            let stickersByBadgeAndUser = stickersByUser.filter( sticker => sticker.badgeId === badge.id );
-            if(!user.stickers){
-                user.stickers = [];
-            }
-            stickersByBadgeAndUser
-            user.stickers.push({
+            let userSticker = {
                 badge: badge,
-                projects: userBadgeProjects
-            })
+                projects: []
+            };
+            stickers
+                .filter(sticker => sticker.userId === user.id && sticker.badgeId === badge.id)
+                .forEach( sticker => {
+                    userSticker.projects.push(projects.find(project => project.id === sticker.projectId));
+                });
+            user.stickers.push(userSticker);
         });
     });
-
-    stickers.forEach( sticker => {
-        let user = users.find( user => user.id === sticker.userId );
-        if(user){
-            delete sticker.userId;
-            if(!user.stickers){
-                user.stickers = [];
-            }
-            user.stickers.push(sticker);
-        }
-    });
+    
     return new Promise( resolve => resolve(users) );
-};
-
-var addProjectsToStickers = (stickers, projects) => {
-    stickers.forEach( sticker => {
-        let project = projects.find( project => project.id === sticker.projectId );
-        delete sticker.projectId;
-        sticker.project = project;
-    });
-    return new Promise( resolve => resolve(stickers) );
 };
