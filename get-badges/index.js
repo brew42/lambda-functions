@@ -7,13 +7,13 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 exports.handler = (event, context, callback) => {
     
    getBadges()
-        .then( badges => context.done(null, badges) )
+        .then( badges => context.done(null, badges.Items) )
         .catch( err => context.done(err) );
 };
 
 var getBadges = () => {
     var params = {
-        TableName: "testthree-BadgeTable"
+        TableName: "Badge"
     };
     return docClient.scan(params).promise();
 };

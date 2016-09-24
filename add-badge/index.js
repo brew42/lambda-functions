@@ -24,7 +24,7 @@ var saveBadge = (badge) => {
     badge.created = (new Date()).toString();
 
     var params = {
-        TableName: "testthree-BadgeTable",
+        TableName: "Badge",
         Item: badge
     };
     return docClient.put(params).promise();

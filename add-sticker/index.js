@@ -25,7 +25,7 @@ var saveSticker = (sticker) => {
     sticker.created = (new Date()).toString();
 
     var params = {
-        TableName: "testthree-StickerTable",
+        TableName: "Sticker",
         Item: sticker
     };
     return docClient.put(params).promise();

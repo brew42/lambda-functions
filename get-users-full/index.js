@@ -18,28 +18,28 @@ exports.handler = (event, context, callback) => {
 
 var getUsers = () => {
     var params = {
-        TableName: "testthree-UserTable"
+        TableName: "User"
     };
     return docClient.scan(params).promise();
 };
 
 var getStickers = () => {
     var params = {
-        TableName: "testthree-StickerTable"
+        TableName: "Sticker"
     };
     return docClient.scan(params).promise();
 };
 
 var getBadges = () => {
     var params = {
-        TableName: "testthree-BadgeTable"
+        TableName: "Badge"
     };
     return docClient.scan(params).promise();
 };
 
 var getProjects = () => {
     var params = {
-        TableName: "testthree-ProjectTable"
+        TableName: "Project"
     };
     return docClient.scan(params).promise();
 };

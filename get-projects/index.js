@@ -8,7 +8,7 @@ exports.handler = (event, context, callback) => {
     
     getProjects()
         .then((projects) => {
-            context.done(null, projects);
+            context.done(null, projects.Items);
         })
         .catch((err) => {
             context.done(err);
@@ -17,7 +17,7 @@ exports.handler = (event, context, callback) => {
 
 var getProjects = () => {
     var params = {
-        TableName: "testthree-ProjectTable"
+        TableName: "Project"
     };
     return docClient.scan(params).promise();
 };

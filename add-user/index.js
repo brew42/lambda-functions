@@ -24,7 +24,7 @@ var saveUser = (user) => {
     user.created = (new Date()).toString();
 
     var params = {
-        TableName: "testthree-UserTable",
+        TableName: "User",
         Item: user
     };
     return docClient.put(params).promise();

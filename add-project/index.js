@@ -24,7 +24,7 @@ var saveProject = (project) => {
     project.created = (new Date()).toString();
 
     var params = {
-        TableName: "testthree-ProjectTable",
+        TableName: "Project",
         Item: project
     };
     return docClient.put(params).promise();
