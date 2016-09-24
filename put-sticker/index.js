@@ -7,20 +7,19 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 exports.handler = (event, context, callback) => {
 
     let params = event;
-    console.log('Received create sticker request with params: ', event);
+    console.log('Received upsert sticker request with params: ', event);
     
     saveSticker(params)
-        .then(() => {
-            context.done(null, { message: "Sticker created successfully" });
-        })
-        .catch((err) => {
-            context.done(err);
+        .then( sticker => context.done(null, sticker))
+        .catch( err => {
+            console.log('Unexpected error adding sticker: ', JSON.stringify(err));
+            context.done( { code: '500', message: 'Unexpected error' } )
         });
 };
 
 var saveSticker = (sticker) => {
 
-    sticker.id = generateUUID();
+    sticker.id = sticker.id ? sticker.id : generateUUID();
     sticker.badgeIdProjectId = sticker.badgeId + sticker.projectId;
     sticker.created = (new Date()).toString();
 
@@ -28,7 +27,10 @@ var saveSticker = (sticker) => {
         TableName: "Sticker",
         Item: sticker
     };
-    return docClient.put(params).promise();
+    // Can't use the aws .promise() response because dynamodb.put operation inexplicably doesn't support returning the put object
+    return new Promise( (resolve, reject) => {
+        docClient.put(params, (err, data) =>  err ? reject(err) : resolve(sticker) );
+    });
 };
 
 function generateUUID(){
