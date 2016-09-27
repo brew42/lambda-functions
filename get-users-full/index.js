@@ -12,7 +12,8 @@ exports.handler = (event, context, callback) => {
             context.done(null, users);
         })
         .catch((err) => {
-            context.done(err);
+            console.log('Unexpected error getting users: ', JSON.stringify(err));
+            context.done( { code: '500', message: 'Unexpected error' } );
         });
 };
 
