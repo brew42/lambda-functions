@@ -13,7 +13,7 @@ exports.handler = (event, context, callback) => {
     
     Promise.all([getUser(id), getStickers(id), getBadges(), getProjects()])
         .then(nestObjects)
-        .then( users => context.done(null, users) )
+        .then( user => context.done(null, user) )
         .catch( err => {
             console.log('Unexpected error getting user: ', JSON.stringify(err));
             context.done( { code: '500', message: 'Unexpected error' } );
@@ -28,7 +28,6 @@ var getUser = (id) => {
             ':id': id
         }
     };
-    console.log('getting user');
     return docClient.query(params).promise();
 };
 
@@ -40,7 +39,6 @@ var getStickers = (userId) => {
             ':id': userId
         }
     };
-    console.log('getting stickers');
     return docClient.query(params).promise();
 };
 
@@ -73,31 +71,18 @@ var nestObjects = (values) => {
 var addStickersToUsers = (users, stickers, badges, projects) => {
     return new Promise( (resolve, reject) => {
         let user = users.length ? users[0] : reject('No users found with that ID');
-        
-        let userStickers = [];
-        badges.forEach( badge => {
-            let userSticker = {
-                badge: badge
-            };
-            stickers
-                .filter(sticker => sticker.userId === user.id && sticker.badgeId === badge.id)
-                .forEach( sticker => {
-                    let project = projects.find(project => project.id === sticker.projectId);
-                    userSticker.projectId = project ? project.id : undefined;
-                });
-            userStickers.push(userSticker);
-        });
-        
+
         user.projects = [];
         projects.forEach( project => {
-            project.stickers = [];
-            let sticker = userStickers.find( sticker => sticker.projectId === project.id );
-            if(sticker){
-                project.stickers.push(sticker);
-            }
+            project.badges = [];
+            badges.forEach( badge => {
+                let sticker = stickers.find( sticker => sticker.badgeId === badge.id && sticker.projectId === project.id );
+                badge.sticker = sticker;
+                project.badges.push(badge);
+            });
             user.projects.push(project);
         });
-        console.log('Nested user:', user);
+
         resolve(user);
     });
 };
