@@ -76,9 +76,16 @@ var addStickersToUsers = (users, stickers, badges, projects) => {
         projects.forEach( project => {
             project.badges = [];
             badges.forEach( badge => {
-                let sticker = stickers.find( sticker => sticker.badgeId === badge.id && sticker.projectId === project.id );
-                badge.sticker = sticker;
-                project.badges.push(badge);
+                let projectBadge = {
+                    id: badge.id,
+                    name: badge.name,
+                    description: badge.description,
+                    icon: badge.icon,
+                    fontSet: badge.fontSet,
+                    sticker: null
+                };
+                projectBadge.sticker = stickers.find( sticker => sticker.badgeId === badge.id && sticker.projectId === project.id );
+                project.badges.push(projectBadge);
             });
             user.projects.push(project);
         });
