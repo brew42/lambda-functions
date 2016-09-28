@@ -8,7 +8,7 @@ exports.handler = (event, context, callback) => {
 
     let params = event;
     
-    deleteSticker(params.userId, params.badgeIdProjectId)
+    deleteSticker(params.userId, params.stickerId)
         .then( sticker => context.done(null, { code: 200, message: 'Successfully deleted sticker' }))
         .catch( err => {
             console.log('Unexpected error adding sticker: ', JSON.stringify(err));
