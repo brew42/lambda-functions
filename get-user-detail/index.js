@@ -6,10 +6,8 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 
 exports.handler = (event, context, callback) => {
 
-    console.log(event);
-    console.log(context);
-    // TODO get user id from call
-    let id = 'b2043b0f-ea0d-434d-99a6-2afae63d9e77';
+    let params = event;
+    let id = params.userId;
     
     Promise.all([getUser(id), getStickers(id), getBadges(), getProjects()])
         .then(nestObjects)

@@ -7,11 +7,6 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 exports.handler = (event, context, callback) => {
 
     let params = event;
-    console.log('Received delete sticker request with params: ', event);
-    params = {
-        userId: 'b2043b0f-ea0d-434d-99a6-2afae63d9e77',
-        badgeIdProjectId: '05ddff7c-09ff-4ce2-a6fd-25f30888e37a204bdc39-4e07-4366-a7fc-47290c914fe1'
-    };
     
     deleteSticker(params.userId, params.badgeIdProjectId)
         .then( sticker => context.done(null, { code: 200, message: 'Successfully deleted sticker' }))
