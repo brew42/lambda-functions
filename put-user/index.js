@@ -13,7 +13,7 @@ exports.handler = (event, context, callback) => {
         .then( user => context.done(null, user) )
         .catch( err => {
             console.log('Unexpected error adding user: ', JSON.stringify(err));
-            context.done( { code: '500', message: 'Unexpected error' } )
+            context.done('Unexpected error');
         });
 };
 
@@ -24,7 +24,7 @@ var saveUser = (user) => {
 
     var params = {
         TableName: "User",
-        Item: user,
+        Item: replaceEmptyWithNull(user),
     };
     // Can't use the aws .promise() response because dynamodb.put operation inexplicably doesn't support returning the put object
     return new Promise( (resolve, reject) => {
@@ -32,9 +32,18 @@ var saveUser = (user) => {
     });
 };
 
-function generateUUID(){
+function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
         return v.toString(16);
     });
+}
+
+function replaceEmptyWithNull(object) {
+    Object.getOwnPropertyNames(object).forEach( prop => {
+        if (object[prop] === '') {
+            object[prop] = null;
+        }
+    });
+    return object;
 }
