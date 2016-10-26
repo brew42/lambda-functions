@@ -27,12 +27,12 @@ var saveUserBadge = (params) => {
         created: (new Date()).toString(),
     }
 
-    var params = {
+    let tableParams = {
         TableName: 'UserBadge',
         Item: userBadge
     };
     // Can't use the aws .promise() response because dynamodb.put operation inexplicably doesn't support returning the put object
     return new Promise( (resolve, reject) => {
-        docClient.put(params, (err, data) =>  err ? reject(err) : resolve(userBadge) );
+        docClient.put(tableParams, (err, data) =>  err ? reject(err) : resolve(userBadge) );
     });
 };

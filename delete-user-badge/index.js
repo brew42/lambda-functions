@@ -18,12 +18,12 @@ exports.handler = (event, context, callback) => {
 
 var deleteUserBadge = (params) => {
 
-    var params = {
+    let tableParams = {
         TableName: 'UserBadge',
         Key: {
             userId: params.userId,
             badgeIdProjectId: params.badgeId + params.projectId
         }
     };
-    return docClient.delete(params).promise()
+    return docClient.delete(tableParams).promise()
 };
