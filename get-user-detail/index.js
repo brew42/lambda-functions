@@ -9,8 +9,8 @@ exports.handler = (event, context, callback) => {
     let params = event;
     let id = params.userId;
     
-    Promise.all([getUser(id), getStickers(id), getBadges(), getProjects()])
-        .then(nestObjects)
+    Promise.all([getUser(id), getUserBadges(id)])
+        .then(addBadgesToUser)
         .then( user => context.done(null, user) )
         .catch( err => {
             console.log('Unexpected error getting user: ', JSON.stringify(err));
@@ -29,9 +29,9 @@ var getUser = (id) => {
     return docClient.query(params).promise();
 };
 
-var getStickers = (userId) => {
+var getUserBadges = (userId) => {
     var params = {
-        TableName: 'Sticker',
+        TableName: 'UserBadge',
         KeyConditionExpression: 'userId = :id',
         ExpressionAttributeValues: {
             ':id': userId
@@ -40,54 +40,18 @@ var getStickers = (userId) => {
     return docClient.query(params).promise();
 };
 
-var getBadges = () => {
-    var params = {
-        TableName: 'Badge'
-    };
-    return docClient.scan(params).promise();
-};
-
-var getProjects = () => {
-    var params = {
-        TableName: 'Project'
-    };
-    return docClient.scan(params).promise();
-};
-
-var nestObjects = (values) => {
+var addBadgesToUser = (values) => {
     let users = values[0].Items;
-    let stickers = values[1].Items;
-    let badges = values[2].Items;
-    let projects = values[3].Items;
+    let userBadges = values[1].Items;
     console.log('Users:', users);
-    console.log('Stickers:', stickers);
-    console.log('Badges:', badges);
-    console.log('Projects:', projects);
-    return addStickersToUsers(users, stickers, badges, projects);
+    console.log('User Badges:', userBadges);
+    return doAddBadgesToUser(users, userBadges);
 };
 
-var addStickersToUsers = (users, stickers, badges, projects) => {
+var addStickersToUsers = (users, userBadges) => {
     return new Promise( (resolve, reject) => {
         let user = users.length ? users[0] : reject('No users found with that ID');
-
-        user.projects = [];
-        projects.forEach( project => {
-            project.badges = [];
-            badges.forEach( badge => {
-                let projectBadge = {
-                    id: badge.id,
-                    name: badge.name,
-                    description: badge.description,
-                    icon: badge.icon,
-                    fontSet: badge.fontSet,
-                    sticker: null
-                };
-                projectBadge.sticker = stickers.find( sticker => sticker.badgeId === badge.id && sticker.projectId === project.id );
-                project.badges.push(projectBadge);
-            });
-            user.projects.push(project);
-        });
-
+        user.badges = userBadges;
         resolve(user);
     });
 };
