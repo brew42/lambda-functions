@@ -1,5 +1,6 @@
 'use strict'
 var AWS = require('aws-sdk');
+var sns = new AWS.SNS({ region: 'us-east-1' });
 var docClient = new AWS.DynamoDB.DocumentClient({
     apiVersion: '2012-08-10'
 });
@@ -10,6 +11,7 @@ exports.handler = (event, context, callback) => {
     console.log('Received upsert badge request with params: ', event);
     
     saveBadge(params)
+        .then(publishSavedBadge)
         .then( badge => context.done(null, badge))
         .catch( err => {
             console.log('Unexpected error adding badge: ', JSON.stringify(err));
@@ -29,6 +31,16 @@ var saveBadge = (badge) => {
     // Can't use the aws .promise() response because dynamodb.put operation inexplicably doesn't support returning the put object
     return new Promise( (resolve, reject) => {
         docClient.put(params, (err, data) =>  err ? reject(err) : resolve(badge) );
+    });
+};
+
+var publishSavedBadge = (badge) => {
+    let params = {
+        Message: JSON.stringify(badge),
+        TopicArn: 'arn:aws:sns:us-east-1:207377804245:BadgeUpdated'
+    };
+    return new Promise( (resolve, reject) => {
+        sns.publish(params, (err, data) => err ? reject(err) : resolve(badge) );
     });
 };
 
