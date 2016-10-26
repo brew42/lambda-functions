@@ -48,7 +48,7 @@ var addBadgesToUser = (values) => {
     return doAddBadgesToUser(users, userBadges);
 };
 
-var addStickersToUsers = (users, userBadges) => {
+var doAddBadgesToUser = (users, userBadges) => {
     return new Promise( (resolve, reject) => {
         let user = users.length ? users[0] : reject('No users found with that ID');
         user.badges = userBadges;
