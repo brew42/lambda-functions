@@ -96,7 +96,7 @@ var getProjectUserSticker = (userBadge, userBadges, stickers) => {
 
     return {
         sticker: getUserSticker(userBadge, stickers, type),
-        save: projectBadges.length > 15
+        save: projectBadges.length > 12
     };
 };
 
