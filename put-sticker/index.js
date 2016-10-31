@@ -13,18 +13,17 @@ exports.handler = (event, context, callback) => {
         .then( sticker => context.done(null, sticker))
         .catch( err => {
             console.log('Unexpected error adding sticker: ', JSON.stringify(err));
-            context.done('Unexpected error');
+            context.done('Unexpected error')
         });
 };
 
 var saveSticker = (sticker) => {
 
     sticker.id = sticker.id ? sticker.id : generateUUID();
-    sticker.badgeIdProjectId = sticker.badgeId + sticker.projectId;
     sticker.created = (new Date()).toString();
 
     var params = {
-        TableName: "Sticker",
+        TableName: 'Sticker',
         Item: replaceEmptyWithNull(sticker)
     };
     // Can't use the aws .promise() response because dynamodb.put operation inexplicably doesn't support returning the put object

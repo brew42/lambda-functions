@@ -1,5 +1,6 @@
 'use strict'
 var AWS = require('aws-sdk');
+var sns = new AWS.SNS({ region: 'us-east-1' });
 var docClient = new AWS.DynamoDB.DocumentClient({
     apiVersion: '2012-08-10'
 });
@@ -10,6 +11,7 @@ exports.handler = (event, context, callback) => {
     console.log('Received upsert project request with params: ', event);
     
     saveProject(params)
+        .then(publishSavedProject)
         .then( project => context.done(null, project))
         .catch( err => {
             console.log('Unexpected error adding project: ', JSON.stringify(err));
@@ -29,6 +31,16 @@ var saveProject = (project) => {
     // Can't use the aws .promise() response because dynamodb.put operation inexplicably doesn't support returning the put object
     return new Promise( (resolve, reject) => {
         docClient.put(params, (err, data) =>  err ? reject(err) : resolve(project) );
+    });
+};
+
+var publishSavedProject = (project) => {
+    let params = {
+        Message: JSON.stringify(project),
+        TopicArn: 'arn:aws:sns:us-east-1:207377804245:ProjectUpdated'
+    };
+    return new Promise( (resolve, reject) => {
+        sns.publish(params, (err, data) => err ? reject(err) : resolve(project) );
     });
 };
 
